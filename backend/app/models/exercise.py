@@ -22,11 +22,11 @@ class Exercise(Base):
         SqlUUID(as_uuid=True), primary_key=True, default=uuid4
     )
     name: Mapped[str] = mapped_column(String(100), nullable=False)
-    primary_muscle: Mapped[MuscleGroup] = mapped_column(nullable=False)
+    primary_muscle: Mapped[MuscleGroup] = mapped_column(SqlEnum(MuscleGroup), nullable=False)
     secondary_muscles: Mapped[list[MuscleGroup]] = mapped_column(
         ARRAY(SqlEnum(MuscleGroup)), default=list
     )
-    equipment: Mapped[Equipment] = mapped_column(nullable=False)
+    equipment: Mapped[Equipment] = mapped_column(SqlEnum(Equipment), nullable=False)
     media_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
     routine_exercises: Mapped[list["RoutineExercise"]] = relationship(

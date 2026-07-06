@@ -24,17 +24,17 @@ class WorkoutSession(Base):
     user_id: Mapped[PyUUID] = mapped_column(
         SqlUUID(as_uuid=True), ForeignKey("users.id"), nullable=False
     )
-    routine_id: Mapped[PyUUID] = mapped_column(
+    routine_id: Mapped[PyUUID | None] = mapped_column(
         SqlUUID(as_uuid=True), ForeignKey("routines.id"), nullable=True
     )
     started_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(UTC)
     )
-    completed_at: Mapped[datetime] = mapped_column(
+    completed_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
 
-    routine: Mapped["Routine"] = relationship(back_populates="workout_sessions")
+    routine: Mapped["Routine | None"] = relationship(back_populates="workout_sessions")
     user: Mapped["User"] = relationship(back_populates="workout_sessions")
     workout_exercises: Mapped[list["WorkoutExercise"]] = relationship(
         back_populates="workout_session", cascade="all, delete-orphan"

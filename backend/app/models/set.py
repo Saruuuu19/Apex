@@ -28,6 +28,6 @@ class Set(Base):
     set_type: Mapped[SetType] = mapped_column(default=SetType.NORMAL)
     reps: Mapped[int | None] = mapped_column(nullable=True)
     weight: Mapped[Decimal | None] = mapped_column(Numeric(6, 2), nullable=True)
-    rpe: Mapped[Decimal | None] = mapped_column(Numeric(2, 1), nullable=True)
+    rpe: Mapped[Decimal | None] = mapped_column(Numeric(3, 1), nullable=True)
 
     workout_exercise: Mapped["WorkoutExercise"] = relationship(back_populates="sets")

@@ -31,5 +31,5 @@ class RoutineExercise(Base):
     routine: Mapped["Routine"] = relationship(back_populates="routine_exercises")
     exercise: Mapped["Exercise"] = relationship(back_populates="routine_exercises")
     routine_sets: Mapped[list["RoutineSet"]] = relationship(
-        back_populates="routine_exercise"
+        back_populates="routine_exercise", cascade="all, delete-orphan"
     )
