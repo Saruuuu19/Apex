@@ -2,12 +2,11 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
-from app.schemas.routine_exercise import RoutineExerciseCreate, RoutineExerciseResponse
+from app.schemas.routine_exercise import RoutineExerciseResponse
 
 
 class RoutineCreate(BaseModel):
     name: str
-    routine_exercises: list[RoutineExerciseCreate]
 
 
 class RoutineResponse(BaseModel):
