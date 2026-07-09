@@ -9,6 +9,10 @@ class RoutineCreate(BaseModel):
     name: str
 
 
+class RoutineUpdate(BaseModel):
+    name: str | None = None
+
+
 class RoutineResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
