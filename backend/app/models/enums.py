@@ -2,48 +2,48 @@ from enum import Enum
 
 
 class SetType(str, Enum):
-    WARM_UP = "warm_up"
-    NORMAL = "normal"
-    DROP_SET = "drop_set"
-    FAILURE = "failure"
+    WARM_UP = "WARM_UP"
+    NORMAL = "NORMAL"
+    DROP_SET = "DROP_SET"
+    FAILURE = "FAILURE"
 
 
 class MuscleGroup(str, Enum):
-    CHEST = "chest"
-    LATS = "lats"
-    UPPER_BACK = "upper_back"
-    TRAPS = "traps"
+    CHEST = "CHEST"
+    LATS = "LATS"
+    UPPER_BACK = "UPPER_BACK"
+    TRAPS = "TRAPS"
 
-    BICEPS = "biceps"
-    TRICEPS = "triceps"
-    FOREARMS = "forearms"
+    BICEPS = "BICEPS"
+    TRICEPS = "TRICEPS"
+    FOREARMS = "FOREARMS"
 
-    FRONT_DELTS = "front_delts"
-    SIDE_DELTS = "side_delts"
-    REAR_DELTS = "rear_delts"
+    FRONT_DELTS = "FRONT_DELTS"
+    SIDE_DELTS = "SIDE_DELTS"
+    REAR_DELTS = "REAR_DELTS"
 
-    QUADS = "quads"
-    HAMSTRINGS = "hamstrings"
-    GLUTES = "glutes"
+    QUADS = "QUADS"
+    HAMSTRINGS = "HAMSTRINGS"
+    GLUTES = "GLUTES"
 
-    CALVES = "calves"
+    CALVES = "CALVES"
 
-    ABS = "abs"
-    OBLIQUES = "obliques"
+    ABS = "ABS"
+    OBLIQUES = "OBLIQUES"
 
-    LOWER_BACK = "lower_back"
+    LOWER_BACK = "LOWER_BACK"
 
-    ADDUCTORS = "adductors"
-    ABDUCTORS = "abductors"
+    ADDUCTORS = "ADDUCTORS"
+    ABDUCTORS = "ABDUCTORS"
 
-    CARDIO = "cardio"
+    CARDIO = "CARDIO"
 
 
 class Equipment(str, Enum):
-    NONE = "none"
-    BARBELL = "barbell"
-    DUMBBELL = "dumbbell"
-    KETTLEBELL = "kettlebell"
-    CABLE = "cable"
-    MACHINE = "machine"
-    PLATE = "plate"
+    NONE = "NONE"
+    BARBELL = "BARBELL"
+    DUMBBELL = "DUMBBELL"
+    KETTLEBELL = "KETTLEBELL"
+    CABLE = "CABLE"
+    MACHINE = "MACHINE"
+    PLATE = "PLATE"

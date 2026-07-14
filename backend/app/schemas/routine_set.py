@@ -17,6 +17,7 @@ class RoutineSetResponse(BaseModel):
 
     id: UUID
     routine_exercise_id: UUID
+    order: int
     target_reps: int | None = None
     target_weight: Decimal | None = None
     set_type: SetType
