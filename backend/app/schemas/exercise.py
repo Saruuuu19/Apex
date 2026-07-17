@@ -1,7 +1,14 @@
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl
+from typing import Annotated
+
+from pydantic import AnyUrl, BaseModel, ConfigDict, Field, UrlConstraints
 from uuid import UUID
 
 from app.models.enums import MuscleGroup, Equipment
+
+# HTTP(S) URL capped at 255 chars to fit the exercises.media_url column
+HttpUrl = Annotated[
+    AnyUrl, UrlConstraints(max_length=255, allowed_schemes=["http", "https"])
+]
 
 
 class ExerciseCreate(BaseModel):
