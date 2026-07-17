@@ -12,7 +12,6 @@ class MuscleGroup(str, Enum):
     CHEST = "CHEST"
     LATS = "LATS"
     UPPER_BACK = "UPPER_BACK"
-    TRAPS = "TRAPS"
 
     BICEPS = "BICEPS"
     TRICEPS = "TRICEPS"
@@ -25,16 +24,13 @@ class MuscleGroup(str, Enum):
     QUADS = "QUADS"
     HAMSTRINGS = "HAMSTRINGS"
     GLUTES = "GLUTES"
-
     CALVES = "CALVES"
+    ADDUCTORS = "ADDUCTORS"
+    ABDUCTORS = "ABDUCTORS"
 
     ABS = "ABS"
     OBLIQUES = "OBLIQUES"
-
     LOWER_BACK = "LOWER_BACK"
-
-    ADDUCTORS = "ADDUCTORS"
-    ABDUCTORS = "ABDUCTORS"
 
     CARDIO = "CARDIO"
 

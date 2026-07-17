@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
+from sqlalchemy import select
 from app.database import get_db
 
 from app.core.dependencies import get_current_user
@@ -13,6 +14,7 @@ from app.schemas.workout_session import (
 from uuid import UUID
 from app.models.workout_exercise import WorkoutExercise
 from app.models.set import Set
+from app.schemas.set import SetResponse, SetUpdate
 
 
 router = APIRouter(prefix="/workout_sessions", tags=["workout_sessions"])
@@ -101,3 +103,44 @@ def create_workout_session_from_routine(
     db.refresh(workout_session)
 
     return workout_session
+
+
+@router.patch(
+    "/sets/{set_id}",
+    response_model=SetResponse,
+    status_code=status.HTTP_200_OK,
+)
+def update_set(
+    set_id: UUID,
+    set_update: SetUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    db_set = db.scalar(
+        select(Set)
+        .where(Set.id == set_id)
+        .options(
+            joinedload(Set.workout_exercise).joinedload(WorkoutExercise.workout_session)
+        )
+    )
+
+    if not db_set:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Set not found"
+        )
+
+    if db_set.workout_exercise.workout_session.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to modify this set",
+        )
+
+    update_data = set_update.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(db_set, field, value)
+
+    db.commit()
+
+    db.refresh(db_set)
+
+    return db_set

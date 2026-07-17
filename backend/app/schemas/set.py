@@ -13,6 +13,13 @@ class SetCreate(BaseModel):
     rpe: Decimal | None = Field(default=None, ge=7, le=10)
 
 
+class SetUpdate(BaseModel):
+    reps: int | None = None
+    weight: Decimal | None = None
+    rpe: Decimal | None = Field(default=None, ge=7, le=10)
+    set_type: SetType | None = None
+
+
 class SetResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
