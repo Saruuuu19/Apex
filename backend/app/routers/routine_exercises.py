@@ -72,3 +72,38 @@ def add_routine_exercise(
     db.refresh(db_routine_exercise)
 
     return db_routine_exercise
+
+
+@router.delete(
+    "/{routine_id}/exercises/{routine_exercise_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def remove_routine_exercise(
+    routine_id: UUID,
+    routine_exercise_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    db_routine = db.get(Routine, routine_id)
+
+    if not db_routine:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Routine not found"
+        )
+
+    if db_routine.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to modify this routine",
+        )
+
+    db_routine_exercise = db.get(RoutineExercise, routine_exercise_id)
+
+    if not db_routine_exercise or db_routine_exercise.routine_id != routine_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Routine exercise not found in this routine",
+        )
+
+    db.delete(db_routine_exercise)
+    db.commit()
