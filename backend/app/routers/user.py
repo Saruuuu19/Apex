@@ -30,6 +30,7 @@ def get_my_routines(
 @router.get("/users/{user_id}/routines", response_model=list[RoutineResponse])
 def get_user_routines(
     user_id: UUID,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     user = db.get(User, user_id)

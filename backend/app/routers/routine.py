@@ -50,6 +50,12 @@ def get_routine(
             status_code=status.HTTP_404_NOT_FOUND, detail="Routine not found"
         )
 
+    if db_routine.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to view this routine",
+        )
+
     return db_routine
 
 
