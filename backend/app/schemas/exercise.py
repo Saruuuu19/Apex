@@ -28,3 +28,11 @@ class ExerciseResponse(BaseModel):
     secondary_muscles: list[MuscleGroup] = Field(default_factory=list)
     equipment: Equipment
     media_url: HttpUrl | None = None
+
+
+class ExerciseUpdate(BaseModel):
+    name: str | None = None
+    primary_muscle: MuscleGroup | None = None
+    secondary_muscles: list[MuscleGroup] | None = None
+    equipment: Equipment | None = None
+    media_url: HttpUrl | None = None
