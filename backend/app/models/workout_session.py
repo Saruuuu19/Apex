@@ -25,7 +25,7 @@ class WorkoutSession(Base):
         SqlUUID(as_uuid=True), ForeignKey("users.id"), nullable=False
     )
     routine_id: Mapped[PyUUID | None] = mapped_column(
-        SqlUUID(as_uuid=True), ForeignKey("routines.id"), nullable=True
+        SqlUUID(as_uuid=True), ForeignKey("routines.id", ondelete="SET NULL"), nullable=True
     )
     started_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(UTC)
