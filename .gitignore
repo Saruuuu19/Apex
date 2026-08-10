@@ -82,3 +82,7 @@ Thumbs.db
 
 # Docker
 docker-compose.yml
+
+## Agents
+AGENTS.MD
+.opencode
