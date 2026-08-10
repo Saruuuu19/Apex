@@ -14,6 +14,7 @@ class SetCreate(BaseModel):
 
 
 class SetUpdate(BaseModel):
+    order: int | None = None
     reps: int | None = None
     weight: Decimal | None = None
     rpe: Decimal | None = Field(default=None, ge=7, le=10)

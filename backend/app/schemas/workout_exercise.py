@@ -19,3 +19,8 @@ class WorkoutExerciseResponse(BaseModel):
     exercise_id: UUID
     order: int
     sets: list[SetResponse] | None = None
+
+
+class WorkoutExerciseUpdate(BaseModel):
+    order: int | None = None
+    exercise_id: UUID | None = None
