@@ -1,15 +1,18 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
 from uuid import UUID
 
-from app.schemas.routine_exercise import RoutineExerciseCreate, RoutineExerciseResponse
-from app.models.user import User
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import select
+from sqlalchemy.orm import Session, joinedload
+
 from app.core.dependencies import get_current_user
 from app.database import get_db
-from app.models.routine import Routine
 from app.models.exercise import Exercise
+from app.models.routine import Routine
 from app.models.routine_exercise import RoutineExercise
 from app.models.routine_set import RoutineSet
+from app.models.user import User
+from app.schemas.routine_exercise import RoutineExerciseCreate, RoutineExerciseResponse
+from app.schemas.routine_set import RoutineSetResponse, RoutineSetUpdate
 
 
 router = APIRouter(prefix="/routines", tags=["Routines"])
@@ -70,6 +73,81 @@ def add_routine_exercise(
     db.refresh(db_routine_exercise)
 
     return db_routine_exercise
+
+
+@router.patch(
+    "/{routine_exercise_id}/sets/{routine_set_id}",
+    response_model=RoutineSetResponse,
+    status_code=status.HTTP_200_OK,
+)
+def update_routine_set(
+    routine_exercise_id: UUID,
+    routine_set_id: UUID,
+    routine_set_update: RoutineSetUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    db_routine_set = db.scalar(
+        select(RoutineSet)
+        .where(RoutineSet.id == routine_set_id)
+        .options(
+            joinedload(RoutineSet.routine_exercise).joinedload(RoutineExercise.routine)
+        )
+    )
+
+    if not db_routine_set or db_routine_set.routine_exercise_id != routine_exercise_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Routine set not found in this routine exercise",
+        )
+
+    if db_routine_set.routine_exercise.routine.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to modify this routine set",
+        )
+
+    for field, value in routine_set_update.model_dump(exclude_unset=True).items():
+        setattr(db_routine_set, field, value)
+
+    db.commit()
+    db.refresh(db_routine_set)
+
+    return db_routine_set
+
+
+@router.delete(
+    "/{routine_exercise_id}/sets/{routine_set_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def remove_routine_set(
+    routine_exercise_id: UUID,
+    routine_set_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    db_routine_set = db.scalar(
+        select(RoutineSet)
+        .where(RoutineSet.id == routine_set_id)
+        .options(
+            joinedload(RoutineSet.routine_exercise).joinedload(RoutineExercise.routine)
+        )
+    )
+
+    if not db_routine_set or db_routine_set.routine_exercise_id != routine_exercise_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Routine set not found in this routine exercise",
+        )
+
+    if db_routine_set.routine_exercise.routine.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to remove this routine set",
+        )
+
+    db.delete(db_routine_set)
+    db.commit()
 
 
 @router.delete(

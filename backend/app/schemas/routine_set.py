@@ -21,3 +21,10 @@ class RoutineSetResponse(BaseModel):
     target_reps: int | None = None
     target_weight: Decimal | None = None
     set_type: SetType
+
+
+class RoutineSetUpdate(BaseModel):
+    order: int | None = None
+    set_type: SetType | None = None
+    target_reps: int | None = None
+    target_weight: Decimal | None = None
