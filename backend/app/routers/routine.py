@@ -1,11 +1,12 @@
-# Routines.py router
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from app.database import get_db
 from uuid import UUID
 
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session, selectinload
+
 from app.core.dependencies import get_current_user
+from app.database import get_db
 from app.models.routine import Routine
+from app.models.routine_exercise import RoutineExercise
 from app.models.user import User
 from app.schemas.routine import RoutineCreate, RoutineResponse, RoutineUpdate
 
@@ -43,7 +44,15 @@ def get_routine(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_routine = db.get(Routine, routine_id)
+    db_routine = db.get(
+        Routine,
+        routine_id,
+        options=[
+            selectinload(Routine.routine_exercises).selectinload(
+                RoutineExercise.routine_sets
+            )
+        ],
+    )
 
     if not db_routine:
         raise HTTPException(
