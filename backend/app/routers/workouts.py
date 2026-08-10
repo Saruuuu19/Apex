@@ -318,3 +318,32 @@ def update_set(
     db.refresh(db_set)
 
     return db_set
+
+
+@router.delete(
+    "/workout-exercises/{workout_exercise_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def remove_workout_exercise(
+    workout_exercise_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    db_workout_exercise = db.scalar(
+        select(WorkoutExercise)
+        .where(WorkoutExercise.id == workout_exercise_id)
+        .options(joinedload(WorkoutExercise.workout_session))
+    )
+
+    if not db_workout_exercise:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Workout exercise not found"
+        )
+    if db_workout_exercise.workout_session.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to delete this workout exercise",
+        )
+
+    db.delete(db_workout_exercise)
+    db.commit()
