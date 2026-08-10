@@ -1,15 +1,14 @@
 from uuid import UUID
 
+from pydantic import BaseModel, ConfigDict, Field
 
-from pydantic import BaseModel, ConfigDict
-
-from app.schemas.routine_set import RoutineSetResponse, RoutineSetCreate
+from app.schemas.routine_set import RoutineSetCreate, RoutineSetResponse
 
 
 class RoutineExerciseCreate(BaseModel):
     exercise_id: UUID
     order: int
-    routine_sets: list[RoutineSetCreate]
+    routine_sets: list[RoutineSetCreate] = Field(default_factory=list)
 
 
 class RoutineExerciseResponse(BaseModel):

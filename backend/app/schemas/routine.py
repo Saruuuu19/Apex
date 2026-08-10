@@ -1,12 +1,12 @@
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.schemas.routine_exercise import RoutineExerciseResponse
 
 
 class RoutineCreate(BaseModel):
-    name: str
+    name: str = Field(max_length=100)
 
 
 class RoutineUpdate(BaseModel):
