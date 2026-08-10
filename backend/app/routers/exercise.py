@@ -108,7 +108,7 @@ def update_exercise(
     "/{exercise_id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
-def delete_exercise(
+def remove_exercise(
     exercise_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
