@@ -128,7 +128,7 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
         )
 
     provider_user_id = str(userinfo["sub"])
-    email = userinfo.get("email")
+    email = userinfo.get("email") if userinfo.get("email_verified") else None
 
     account = db.scalar(
         select(OAuthAccount).where(
@@ -162,4 +162,6 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
 
     access_token = create_access_token({"sub": str(user.id)})
 
-    return RedirectResponse(url=f"{settings.FRONTEND_URL}/login?token={access_token}")
+    return RedirectResponse(
+        url=f"{settings.FRONTEND_URL}/auth/callback?token={access_token}"
+    )
