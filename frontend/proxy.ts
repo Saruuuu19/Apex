@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const PROTECTED_PREFIXES = ["/routines", "/workout-sessions"];
+const PROTECTED_PREFIXES = ["/dashboard", "/feed", "/routines", "/exercises", "/trainer", "/settings", "/profile", "/workout-sessions"];
 const AUTH_PAGES = ["/login", "/register"];
 
 export function proxy(request: NextRequest) {
@@ -25,5 +25,16 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/routines/:path*", "/workout-sessions/:path*", "/login", "/register"],
+  matcher: [
+    "/dashboard/:path*",
+    "/feed/:path*",
+    "/routines/:path*",
+    "/exercises/:path*",
+    "/trainer/:path*",
+    "/settings/:path*",
+    "/profile/:path*",
+    "/workout-sessions/:path*",
+    "/login",
+    "/register",
+  ],
 };
