@@ -19,6 +19,7 @@
   --text: #fff;
   --text-muted: #555;
   --text-link: #8320fd;
+  --text-danger: #f87171;
 
   --button-bg: #8320fd;
   --button-bg-hover: color-mix(in oklch, var(--button-bg) 85%, white);
