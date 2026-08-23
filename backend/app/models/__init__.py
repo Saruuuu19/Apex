@@ -7,6 +7,8 @@ from app.models.workout_session import WorkoutSession
 from app.models.workout_exercise import WorkoutExercise
 from app.models.set import Set
 from app.models.oauth_account import OAuthAccount
+from app.models.refresh_token import RefreshToken
+from app.models.exchange_code import ExchangeCode
 
 __all__ = [
     "User",
@@ -18,4 +20,6 @@ __all__ = [
     "WorkoutExercise",
     "Set",
     "OAuthAccount",
+    "RefreshToken",
+    "ExchangeCode",
 ]

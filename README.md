@@ -10,7 +10,7 @@ Hoy Apex se centra en el **tracking de entrenamiento**: crear rutinas, convertir
 - **Sesiones de entrenamiento** — se crean a partir de una rutina (copia desacoplada) o en blanco; se completan cuando terminas.
 - **Registro de series** — cada set guarda reps, peso y RPE realizados durante el entrenamiento.
 - **Catálogo de ejercicios** — base de datos de ejercicios con músculo principal, secundarios y equipamiento (gestionada por dev).
-- **Autenticación JWT** — registro, login y sesiones por usuario, con rate-limiting en login/registro.
+- **Autenticación JWT** — registro, login y sesiones por usuario con refresh token rotativo (httpOnly), detección de reuso, y rate-limiting en login/registro.
 
 ## Stack
 
@@ -19,7 +19,7 @@ Hoy Apex se centra en el **tracking de entrenamiento**: crear rutinas, convertir
 | Frontend      | Next.js 16 · TypeScript · Tailwind CSS 4 · pnpm       |
 | Backend       | FastAPI · Python 3.14 · SQLAlchemy 2.0 · Alembic · uv |
 | Base de datos | PostgreSQL 17 (Docker Compose)                        |
-| Auth          | JWT (python-jose) · bcrypt · rate-limiting (slowapi)  |
+| Auth          | JWT (python-jose) · refresh tokens rotativos (SHA-256 en DB) · bcrypt · rate-limiting (slowapi) |
 
 ## Conceptos clave
 
@@ -132,7 +132,9 @@ La API expone su documentación interactiva (Swagger UI) en **<http://localhost:
 
 Recursos principales:
 
-- `POST /auth/register`, `POST /auth/login` — autenticación
+- `POST /auth/register`, `POST /auth/login` — autenticación (login emite access + refresh token)
+- `POST /auth/refresh` — rotación del refresh token (ventana de gracia + detección de reuso)
+- `POST /auth/logout` — revoca la sesión; `POST /auth/exchange` — intercambio del code de OAuth por tokens
 - `/routines` — CRUD de rutinas y sus ejercicios/series
 - `/workout-sessions` — creación, inicio desde rutina, registro de sets y completado
 - `/exercises` — catálogo de ejercicios

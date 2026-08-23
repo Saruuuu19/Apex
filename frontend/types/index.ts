@@ -37,8 +37,9 @@ export interface User {
   created_at: string;
 }
 
-export interface TokenResponse {
+export interface TokenPairResponse {
   access_token: string;
+  refresh_token: string;
   token_type: string;
 }
 

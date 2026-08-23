@@ -10,6 +10,9 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     SECRET_KEY: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 30
+    REFRESH_GRACE_SECONDS: int = 30
+    EXCHANGE_CODE_EXPIRE_SECONDS: int = 60
     ALGORITHM: str = "HS256"
 
     GOOGLE_CLIENT_ID: str | None = None

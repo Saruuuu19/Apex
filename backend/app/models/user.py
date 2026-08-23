@@ -9,7 +9,9 @@ from app.database import Base
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from app.models.exchange_code import ExchangeCode
     from app.models.oauth_account import OAuthAccount
+    from app.models.refresh_token import RefreshToken
     from app.models.routine import Routine
     from app.models.workout_session import WorkoutSession
 
@@ -36,5 +38,11 @@ class User(Base):
         back_populates="user", cascade="all, delete-orphan"
     )
     oauth_accounts: Mapped[list["OAuthAccount"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    refresh_tokens: Mapped[list["RefreshToken"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    exchange_codes: Mapped[list["ExchangeCode"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )

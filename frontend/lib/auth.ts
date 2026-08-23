@@ -3,6 +3,12 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { API_BASE_URL } from "@/lib/api";
+import {
+  ACCESS_COOKIE,
+  ACCESS_COOKIE_OPTIONS,
+  REFRESH_COOKIE,
+  REFRESH_COOKIE_OPTIONS,
+} from "@/lib/session";
 
 export async function login(username: string, password: string) {
   try {
@@ -15,14 +21,10 @@ export async function login(username: string, password: string) {
     const data = await res.json();
 
     if (res.ok) {
-      const { access_token } = data;
-      (await cookies()).set("apex_token", access_token, {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        maxAge: 30 * 60, // 30 minutes (consistent with backend)
-        secure: process.env.NODE_ENV === "production",
-      });
+      const { access_token, refresh_token } = data;
+      const jar = await cookies();
+      jar.set(ACCESS_COOKIE, access_token, ACCESS_COOKIE_OPTIONS);
+      jar.set(REFRESH_COOKIE, refresh_token, REFRESH_COOKIE_OPTIONS);
       return redirect("/routines");
     }
     return { error: data.detail };
@@ -55,6 +57,22 @@ export async function register(
 }
 
 export async function logout() {
-  (await cookies()).delete("apex_token");
+  const jar = await cookies();
+  const refreshToken = jar.get(REFRESH_COOKIE)?.value;
+
+  if (refreshToken) {
+    try {
+      await fetch(`${API_BASE_URL}/auth/logout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh_token: refreshToken }),
+      });
+    } catch {
+      // Backend unreachable: still clear the local session.
+    }
+  }
+
+  jar.delete(ACCESS_COOKIE);
+  jar.delete(REFRESH_COOKIE);
   return redirect("/login");
 }
