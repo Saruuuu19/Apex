@@ -14,11 +14,11 @@ Hoy Apex se centra en el **tracking de entrenamiento**: crear rutinas, convertir
 
 ## Stack
 
-| Capa          | Tecnología                                            |
-| ------------- | ----------------------------------------------------- |
-| Frontend      | Next.js 16 · TypeScript · Tailwind CSS 4 · pnpm       |
-| Backend       | FastAPI · Python 3.14 · SQLAlchemy 2.0 · Alembic · uv |
-| Base de datos | PostgreSQL 17 (Docker Compose)                        |
+| Capa          | Tecnología                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------------- |
+| Frontend      | Next.js 16 · TypeScript · Tailwind CSS 4 · pnpm                                                 |
+| Backend       | FastAPI · Python 3.14 · SQLAlchemy 2.0 · Alembic · uv                                           |
+| Base de datos | PostgreSQL 17 (Docker Compose)                                                                  |
 | Auth          | JWT (python-jose) · refresh tokens rotativos (SHA-256 en DB) · bcrypt · rate-limiting (slowapi) |
 
 ## Conceptos clave
@@ -30,7 +30,7 @@ Hoy Apex se centra en el **tracking de entrenamiento**: crear rutinas, convertir
 ## Estructura del proyecto
 
 ```
-apex-os/
+Apex/
 ├── backend/            # API FastAPI (app/, alembic/, .env)
 ├── frontend/           # Webapp Next.js (app/, package.json)
 ├── docker-compose.yml  # PostgreSQL local
@@ -76,7 +76,7 @@ apex-os/
 
 ### Docker / PostgreSQL
 
-Ejecutar **desde la raíz del repo** (`apex-os/`).
+Ejecutar **desde la raíz del repo** (`Apex/`).
 
 | Comando                           | Qué hace                            |
 | --------------------------------- | ----------------------------------- |

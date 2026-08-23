@@ -1,4 +1,4 @@
-# Apex OS — Frontend
+# Apex — Frontend
 
 Next.js 16 + React 19 + Tailwind CSS v4 + TypeScript.
 

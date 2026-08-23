@@ -22,7 +22,7 @@ const navItems: { label: string; href: string; icon: LucideIcon }[] = [
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
-export function Sidebar() {
+export function Navbar() {
   return (
     <aside className="flex h-screen w-64 flex-col border-r border-(--bg-input) bg-(--bg) px-4 py-6">
       <Link href="/" className="mb-8 px-2">
