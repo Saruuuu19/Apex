@@ -26,7 +26,7 @@ export async function login(username: string, password: string) {
       return redirect("/routines");
     }
     return { error: data.detail };
-  } catch (error) {
+  } catch {
     return { error: "No se pudo conectar" };
   }
 }
@@ -49,7 +49,7 @@ export async function register(
     }
 
     return { error: data.detail };
-  } catch (error) {
+  } catch {
     return { error: "No se pudo conectar" };
   }
 }
