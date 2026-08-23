@@ -1,4 +1,7 @@
 import { type LucideIcon, Mail, User, Lock } from "lucide-react";
+import { GoogleIcon } from "@/components/ui/Icons";
+
+const GOOGLE_AUTH_URL = "http://localhost:8000/auth/google/register";
 
 const inputItems: {
   label: string;
@@ -93,10 +96,20 @@ export default function RegisterPage() {
             <span className="h-px flex-1 bg-(--bg-surface)" />
 
             <span className="shrink-0 text-sm font-mono text-(--text-muted)">
-              or continue with
+              Or continue with
             </span>
 
             <span className="h-px flex-1 bg-(--bg-surface)" />
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <a
+              href={GOOGLE_AUTH_URL}
+              className="flex h-10 w-full items-center justify-center gap-3 rounded-md border border-(--bg-surface) bg-(--bg-surface) px-4 font-mono text-sm text-(--text) transition-colors hover:bg-(--bg-surface-hover)"
+            >
+              <GoogleIcon className="h-4 w-4 shrink-0" />
+              Sign up with Google
+            </a>
           </div>
         </form>
       </main>

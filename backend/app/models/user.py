@@ -9,6 +9,7 @@ from app.database import Base
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from app.models.oauth_account import OAuthAccount
     from app.models.routine import Routine
     from app.models.workout_session import WorkoutSession
 
@@ -32,5 +33,8 @@ class User(Base):
     )
     routines: Mapped[list["Routine"]] = relationship(back_populates="user")
     workout_sessions: Mapped[list["WorkoutSession"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    oauth_accounts: Mapped[list["OAuthAccount"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )

@@ -6,6 +6,7 @@ from app.models.routine_set import RoutineSet
 from app.models.workout_session import WorkoutSession
 from app.models.workout_exercise import WorkoutExercise
 from app.models.set import Set
+from app.models.oauth_account import OAuthAccount
 
 __all__ = [
     "User",
@@ -16,4 +17,5 @@ __all__ = [
     "WorkoutSession",
     "WorkoutExercise",
     "Set",
+    "OAuthAccount",
 ]
