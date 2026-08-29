@@ -2,7 +2,8 @@
 
 @theme inline {
   --font-sans: var(--font-geist), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono:
+    var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-pixel: var(--font-geist-pixel), monospace;
 }
 
@@ -17,9 +18,13 @@
   --bg-input-hover: #3a3a3a;
 
   --text: #fff;
-  --text-muted: #555;
+  --text-muted: #6b6b6b;
   --text-link: #8320fd;
   --text-danger: #f87171;
+
+  --recovery-red: #f33434;
+  --recovery-yellow: #f7d54f;
+  --recovery-green: #4ade80;
 
   --button-bg: #8320fd;
   --button-bg-hover: color-mix(in oklch, var(--button-bg) 85%, white);
