@@ -8,7 +8,16 @@ import {
   REFRESH_COOKIE_OPTIONS,
 } from "@/lib/session";
 
-const PROTECTED_PREFIXES = ["/dashboard", "/feed", "/routines", "/exercises", "/trainer", "/settings", "/profile", "/workout-sessions"];
+const PROTECTED_PREFIXES = [
+  "/home/feed",
+  "/home/dashboard",
+  "/routines",
+  "/exercises",
+  "/trainer",
+  "/settings",
+  "/profile",
+  "/workout-sessions",
+];
 const AUTH_PAGES = ["/login", "/register"];
 
 const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:8000";
@@ -79,6 +88,14 @@ async function refreshAndRedirect(
 }
 
 export function proxy(request: NextRequest) {
+  // DEV ONLY: permite previsualizar rutas protegidas sin auth en local
+  if (
+    process.env.DEV_BYPASS_AUTH === "true" &&
+    process.env.NODE_ENV !== "production"
+  ) {
+    return NextResponse.next();
+  }
+
   const { pathname } = request.nextUrl;
   const isProtected = PROTECTED_PREFIXES.some((prefix) =>
     pathname.startsWith(prefix),
@@ -119,8 +136,8 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/dashboard/:path*",
-    "/feed/:path*",
+    "/home/feed/:path*",
+    "/home/dashboard/:path*",
     "/routines/:path*",
     "/exercises/:path*",
     "/trainer/:path*",
