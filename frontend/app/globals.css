@@ -18,6 +18,7 @@
   --bg-input-hover: #3a3a3a;
 
   --text: #fff;
+  --text-secondary: #b2b2b2;
   --text-muted: #6b6b6b;
   --text-link: #8320fd;
   --text-danger: #f87171;
@@ -28,6 +29,13 @@
 
   --button-bg: #8320fd;
   --button-bg-hover: color-mix(in oklch, var(--button-bg) 85%, white);
+
+  --button-danger-bg: #f33434;
+  --button-danger-bg-hover: color-mix(
+    in oklch,
+    var(--button-danger-bg) 85%,
+    white
+  );
 }
 
 body {
