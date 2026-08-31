@@ -15,6 +15,7 @@ from app.models.workout_exercise import WorkoutExercise
 from app.models.workout_session import WorkoutSession
 from app.schemas.set import SetCreate, SetResponse, SetUpdate
 from app.schemas.workout_exercise import (
+    WorkoutExerciseCreate,
     WorkoutExerciseResponse,
     WorkoutExerciseUpdate,
 )
@@ -110,6 +111,64 @@ def create_workout_session_from_routine(
 
 
 @router.post(
+    "/{workout_session_id}/exercises",
+    response_model=WorkoutExerciseResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def add_workout_exercise(
+    workout_session_id: UUID,
+    workout_exercise: WorkoutExerciseCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    db_workout_session = db.get(WorkoutSession, workout_session_id)
+
+    if not db_workout_session:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Workout session not found",
+        )
+    if db_workout_session.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to modify this workout session",
+        )
+    if db_workout_session.completed_at is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Cannot modify a completed workout session",
+        )
+
+    db_exercise = db.get(Exercise, workout_exercise.exercise_id)
+    if not db_exercise:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found"
+        )
+
+    db_workout_exercise = WorkoutExercise(
+        workout_session_id=workout_session_id,
+        exercise_id=workout_exercise.exercise_id,
+        order=workout_exercise.order,
+        sets=[
+            Set(
+                order=set_data.order,
+                set_type=set_data.set_type,
+                reps=set_data.reps,
+                weight=set_data.weight,
+                rpe=set_data.rpe,
+            )
+            for set_data in (workout_exercise.sets or [])
+        ],
+    )
+
+    db.add(db_workout_exercise)
+    db.commit()
+    db.refresh(db_workout_exercise)
+
+    return db_workout_exercise
+
+
+@router.post(
     "/{id}/complete",
     response_model=WorkoutSessionResponse,
     status_code=status.HTTP_200_OK,
@@ -144,6 +203,37 @@ def complete_workout_session(
     db.refresh(workout_session)
 
     return workout_session
+
+
+@router.delete(
+    "/{workout_session_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def delete_workout_session(
+    workout_session_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    db_workout_session = db.get(WorkoutSession, workout_session_id)
+
+    if not db_workout_session:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Workout session not found",
+        )
+    if db_workout_session.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to delete this workout session",
+        )
+    if db_workout_session.completed_at is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Cannot delete a completed workout session",
+        )
+
+    db.delete(db_workout_session)
+    db.commit()
 
 
 @router.post(
@@ -318,6 +408,43 @@ def update_set(
     db.refresh(db_set)
 
     return db_set
+
+
+@router.delete(
+    "/sets/{set_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def remove_set(
+    set_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    db_set = db.scalar(
+        select(Set)
+        .where(Set.id == set_id)
+        .options(
+            joinedload(Set.workout_exercise).joinedload(WorkoutExercise.workout_session)
+        )
+    )
+
+    if not db_set:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Set not found"
+        )
+
+    if db_set.workout_exercise.workout_session.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to remove this set",
+        )
+    if db_set.workout_exercise.workout_session.completed_at is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Cannot modify a completed workout session",
+        )
+
+    db.delete(db_set)
+    db.commit()
 
 
 @router.delete(
