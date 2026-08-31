@@ -12,7 +12,7 @@ from app.models.routine_exercise import RoutineExercise
 from app.models.routine_set import RoutineSet
 from app.models.user import User
 from app.schemas.routine_exercise import RoutineExerciseCreate, RoutineExerciseResponse
-from app.schemas.routine_set import RoutineSetResponse, RoutineSetUpdate
+from app.schemas.routine_set import RoutineSetCreate, RoutineSetResponse, RoutineSetUpdate
 
 
 router = APIRouter(prefix="/routines", tags=["Routines"])
@@ -73,6 +73,50 @@ def add_routine_exercise(
     db.refresh(db_routine_exercise)
 
     return db_routine_exercise
+
+
+@router.post(
+    "/{routine_exercise_id}/sets",
+    response_model=RoutineSetResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def add_routine_set(
+    routine_exercise_id: UUID,
+    routine_set: RoutineSetCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    db_routine_exercise = db.scalar(
+        select(RoutineExercise)
+        .where(RoutineExercise.id == routine_exercise_id)
+        .options(joinedload(RoutineExercise.routine))
+    )
+
+    if not db_routine_exercise:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Routine exercise not found",
+        )
+
+    if db_routine_exercise.routine.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to modify this routine exercise",
+        )
+
+    db_routine_set = RoutineSet(
+        routine_exercise_id=routine_exercise_id,
+        order=routine_set.order,
+        target_reps=routine_set.target_reps,
+        target_weight=routine_set.target_weight,
+        set_type=routine_set.set_type,
+    )
+
+    db.add(db_routine_set)
+    db.commit()
+    db.refresh(db_routine_set)
+
+    return db_routine_set
 
 
 @router.patch(
