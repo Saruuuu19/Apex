@@ -7,8 +7,8 @@ import { type LucideIcon, Dumbbell, House, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems: { label: string; href: string; icon: LucideIcon }[] = [
-  { label: "Home", href: "/home/feed", icon: House },
-  { label: "Workout", href: "/workout-sessions", icon: Dumbbell },
+  { label: "Home", href: "/home/dashboard", icon: House },
+  { label: "Workout", href: "/workout", icon: Dumbbell },
   { label: "Profile", href: "/profile", icon: User },
 ];
 

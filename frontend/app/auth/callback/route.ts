@@ -32,5 +32,5 @@ export async function GET(request: NextRequest) {
   jar.set(ACCESS_COOKIE, access_token, ACCESS_COOKIE_OPTIONS);
   jar.set(REFRESH_COOKIE, refresh_token, REFRESH_COOKIE_OPTIONS);
 
-  return NextResponse.redirect(new URL("/routines", request.url));
+  return NextResponse.redirect(new URL("/workout", request.url));
 }

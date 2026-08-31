@@ -11,12 +11,11 @@ import {
 const PROTECTED_PREFIXES = [
   "/home/feed",
   "/home/dashboard",
-  "/routines",
+  "/workout",
   "/exercises",
   "/trainer",
   "/settings",
   "/profile",
-  "/workout-sessions",
 ];
 const AUTH_PAGES = ["/login", "/register"];
 
@@ -74,7 +73,7 @@ async function refreshAndRedirect(
     const { access_token, refresh_token } = await res.json();
 
     const target = goToRoutines
-      ? new URL("/routines", request.url)
+      ? new URL("/workout", request.url)
       : request.nextUrl.clone();
     const response = NextResponse.redirect(target);
     response.cookies.set(ACCESS_COOKIE, access_token, ACCESS_COOKIE_OPTIONS);
@@ -108,7 +107,7 @@ export function proxy(request: NextRequest) {
 
   if (isAuthPage) {
     if (accessToken && !accessExpiring) {
-      return NextResponse.redirect(new URL("/routines", request.url));
+      return NextResponse.redirect(new URL("/workout", request.url));
     }
     if (refreshToken) {
       return refreshAndRedirect(request, refreshToken, true);
@@ -138,12 +137,11 @@ export const config = {
   matcher: [
     "/home/feed/:path*",
     "/home/dashboard/:path*",
-    "/routines/:path*",
+    "/workout/:path*",
     "/exercises/:path*",
     "/trainer/:path*",
     "/settings/:path*",
     "/profile/:path*",
-    "/workout-sessions/:path*",
     "/login",
     "/register",
   ],
