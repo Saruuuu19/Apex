@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from app.models.oauth_account import OAuthAccount
     from app.models.refresh_token import RefreshToken
     from app.models.routine import Routine
+    from app.models.workout_post import WorkoutPost
     from app.models.workout_session import WorkoutSession
 
 
@@ -37,6 +38,7 @@ class User(Base):
     workout_sessions: Mapped[list["WorkoutSession"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
+    workout_posts: Mapped[list["WorkoutPost"]] = relationship(back_populates="user")
     oauth_accounts: Mapped[list["OAuthAccount"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )

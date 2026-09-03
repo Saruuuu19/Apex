@@ -5,6 +5,7 @@ from app.models.routine_exercise import RoutineExercise
 from app.models.routine_set import RoutineSet
 from app.models.workout_session import WorkoutSession
 from app.models.workout_exercise import WorkoutExercise
+from app.models.workout_post import WorkoutPost
 from app.models.set import Set
 from app.models.oauth_account import OAuthAccount
 from app.models.refresh_token import RefreshToken
@@ -18,6 +19,7 @@ __all__ = [
     "RoutineSet",
     "WorkoutSession",
     "WorkoutExercise",
+    "WorkoutPost",
     "Set",
     "OAuthAccount",
     "RefreshToken",

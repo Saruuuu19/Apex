@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from app.models.routine import Routine
     from app.models.user import User
     from app.models.workout_exercise import WorkoutExercise
+    from app.models.workout_post import WorkoutPost
 
 
 class WorkoutSession(Base):
@@ -39,3 +40,4 @@ class WorkoutSession(Base):
     workout_exercises: Mapped[list["WorkoutExercise"]] = relationship(
         back_populates="workout_session", cascade="all, delete-orphan"
     )
+    workout_posts: Mapped[list["WorkoutPost"]] = relationship(back_populates="workout_session")
