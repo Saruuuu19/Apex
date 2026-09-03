@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Body, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload, selectinload
 
@@ -20,6 +20,8 @@ from app.schemas.workout_exercise import (
     WorkoutExerciseUpdate,
 )
 from app.schemas.workout_session import WorkoutSessionCreate, WorkoutSessionResponse
+from app.schemas.workout_post import WorkoutPostCreate
+from app.models.workout_post import WorkoutPost
 
 
 router = APIRouter(prefix="/workout-sessions", tags=["workout-sessions"])
@@ -176,6 +178,7 @@ def add_workout_exercise(
 def complete_workout_session(
     id: UUID,
     current_user: User = Depends(get_current_user),
+    payload: WorkoutPostCreate | None = Body(default=None),
     db: Session = Depends(get_db),
 ):
     workout_session = db.get(WorkoutSession, id)
@@ -199,6 +202,14 @@ def complete_workout_session(
 
     workout_session.completed_at = datetime.now(UTC)
 
+    post = WorkoutPost(
+        user_id=current_user.id,
+        workout_session_id=workout_session.id,
+        caption=payload.caption if payload else None,
+        performed_at=workout_session.started_at,
+    )
+
+    db.add(post)
     db.commit()
     db.refresh(workout_session)
 
