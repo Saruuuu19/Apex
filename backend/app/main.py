@@ -12,6 +12,7 @@ from app.routers.routine import router as routines_router
 from app.routers.user import router as users_router
 from app.routers.workouts import router as workout_sessions_router
 from app.routers.routine_exercises import router as routine_exercises_router
+from app.routers.feed import router as feed_router
 
 app = FastAPI(
     title="Apex API",
@@ -46,3 +47,4 @@ app.include_router(routines_router)
 app.include_router(users_router)
 app.include_router(workout_sessions_router)
 app.include_router(routine_exercises_router)
+app.include_router(feed_router)

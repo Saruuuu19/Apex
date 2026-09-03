@@ -19,11 +19,19 @@ class WorkoutPost(Base):
 
     performed_at is the date/time the user started the workout session (copied
     from WorkoutSession.started_at), not when the post was published.
-
-    duration_seconds is NOT stored. It is derived from the linked
-    WorkoutSession as (completed_at or now) - started_at, and is None when
-    workout_session_id is NULL because the session was deleted.
     """
+
+    @property
+    def duration_seconds(self) -> int | None:
+        if self.workout_session is None:
+            return None
+        if self.workout_session.completed_at is None:
+            return None
+        return int(
+            (
+                self.workout_session.completed_at - self.workout_session.started_at
+            ).total_seconds()
+        )
 
     __tablename__ = "workout_posts"
 
