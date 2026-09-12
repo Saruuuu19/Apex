@@ -94,6 +94,12 @@ export type WorkoutSetPatch = {
   completed?: boolean;
 };
 
+export type WorkoutPostCreateBody = {
+  title?: string | null;
+  caption?: string | null;
+  image_url?: string | null;
+};
+
 export const api = {
   me: () => apiFetch<User>("/auth/me"),
   myRoutines: () => apiFetch<Routine[]>("/me/routines"),
@@ -181,10 +187,21 @@ export const api = {
     }),
   removeSet: (setId: string) =>
     apiFetch<void>(`/workout-sessions/sets/${setId}`, { method: "DELETE" }),
-  completeWorkout: (id: string) =>
+  completeWorkout: (id: string, body: WorkoutPostCreateBody = {}) =>
     apiFetch<WorkoutSession>(`/workout-sessions/${id}/complete`, {
       method: "POST",
+      body: JSON.stringify(body),
     }),
   deleteWorkoutSession: (id: string) =>
     apiFetch<void>(`/workout-sessions/${id}`, { method: "DELETE" }),
+
+  // Feed & uploads
+  uploadPostImage: (file: File) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    return apiFetch<{ image_url: string }>("/uploads/post-image", {
+      method: "POST",
+      body: formData,
+    });
+  },
 };

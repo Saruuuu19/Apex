@@ -8,6 +8,7 @@ import {
   type RoutineSetPatch,
   type WorkoutSetPatch,
 } from "@/lib/api";
+import { workoutCompletionError } from "@/lib/utils";
 
 export type RoutineFormState = { error?: string } | null;
 
@@ -201,15 +202,40 @@ export async function removeWorkoutSet(
   revalidatePath(`/workout/${sessionId}`);
 }
 
-export async function completeWorkout(sessionId: string): Promise<void> {
+export async function completeWorkout(
+  sessionId: string,
+  _prev: RoutineFormState,
+  formData: FormData,
+): Promise<RoutineFormState> {
   const session = await api.getWorkoutSession(sessionId);
-  if (session.workout_exercises.length === 0) {
-    throw new Error("Add at least one exercise before completing the workout");
+  const validationError = workoutCompletionError(session);
+  if (validationError) {
+    return { error: validationError };
   }
-  await api.completeWorkout(sessionId);
-  revalidatePath(`/workout/${sessionId}`);
+
+  const title = String(formData.get("title") ?? "").trim();
+  const caption = String(formData.get("caption") ?? "").trim();
+  const image = formData.get("image");
+
+  try {
+    let imageUrl: string | null = null;
+    if (image instanceof File && image.size > 0) {
+      const uploaded = await api.uploadPostImage(image);
+      imageUrl = uploaded.image_url;
+    }
+
+    await api.completeWorkout(sessionId, {
+      title: title || null,
+      caption: caption || null,
+      image_url: imageUrl,
+    });
+  } catch (err) {
+    return { error: errorMessage(err) };
+  }
+
   revalidatePath("/workout");
-  redirect("/workout");
+  revalidatePath("/home/feed");
+  redirect("/home/feed");
 }
 
 export async function discardWorkout(sessionId: string): Promise<void> {

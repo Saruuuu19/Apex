@@ -1,7 +1,9 @@
 import { api } from "@/lib/api";
 import { getCatalogExercises } from "@/lib/exercises";
-import { completeWorkout, discardWorkout } from "@/lib/actions/workout";
+import { discardWorkout } from "@/lib/actions/workout";
 import { ActiveWorkout } from "@/components/features/workout-sessions/ActiveWorkout";
+import { CompleteWorkoutSheet } from "@/components/features/workout-sessions/CompleteWorkoutSheet";
+import { DeleteWorkoutButton } from "@/components/features/workout-sessions/DeleteWorkoutButton";
 
 export default async function WorkoutSessionPage({
   params,
@@ -27,27 +29,26 @@ export default async function WorkoutSessionPage({
         </header>
 
         <section className="flex w-full flex-col items-start gap-3">
-          <ActiveWorkout session={session} exercises={exercises} />
+          <ActiveWorkout
+            session={session}
+            exercises={exercises}
+            readOnly={isCompleted}
+          />
         </section>
 
         {isCompleted ? (
-          <p
-            className="w-full text-center font-pixel text-sm font-semibold"
-            style={{ color: "var(--recovery-green)" }}
-          >
-            Completed
-          </p>
+          <div className="flex w-full flex-col items-center gap-3">
+            <p
+              className="w-full text-center font-pixel text-sm font-semibold"
+              style={{ color: "var(--recovery-green)" }}
+            >
+              Completed
+            </p>
+            <DeleteWorkoutButton sessionId={id} />
+          </div>
         ) : (
           <>
-            <form action={completeWorkout.bind(null, id)} className="w-full">
-              <button
-                type="submit"
-                disabled={!hasExercises}
-                className="h-10 w-full rounded-md bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover) disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                Complete Workout
-              </button>
-            </form>
+            <CompleteWorkoutSheet session={session} />
             {!hasExercises ? (
               <p className="w-full text-center text-xs text-(--text-muted)">
                 Add at least one exercise to complete the workout.
