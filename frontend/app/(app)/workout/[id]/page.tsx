@@ -1,4 +1,5 @@
 import { api } from "@/lib/api";
+import { getCatalogExercises } from "@/lib/exercises";
 import { completeWorkout, discardWorkout } from "@/lib/actions/workout";
 import { ActiveWorkout } from "@/components/features/workout-sessions/ActiveWorkout";
 
@@ -9,10 +10,8 @@ export default async function WorkoutSessionPage({
 }) {
   const { id } = await params;
 
-  const [session, exercises] = await Promise.all([
-    api.getWorkoutSession(id),
-    api.getExercises(),
-  ]);
+  const session = await api.getWorkoutSession(id);
+  const exercises = getCatalogExercises();
 
   const isCompleted = session.completed_at != null;
   const hasExercises = session.workout_exercises.length > 0;

@@ -1,4 +1,5 @@
 import { api } from "@/lib/api";
+import { getCatalogExercises } from "@/lib/exercises";
 import {
   deleteRoutine,
   renameRoutine,
@@ -14,10 +15,8 @@ export default async function RoutineDetailPage({
 }) {
   const { id } = await params;
 
-  const [routine, exercises] = await Promise.all([
-    api.getRoutine(id),
-    api.getExercises(),
-  ]);
+  const routine = await api.getRoutine(id);
+  const exercises = getCatalogExercises();
 
   const renameAction = renameRoutine.bind(null, id);
   const startAction = startWorkoutFromRoutine.bind(null, id);

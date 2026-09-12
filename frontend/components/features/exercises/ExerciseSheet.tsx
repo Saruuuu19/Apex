@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Search, X } from "lucide-react";
 
 import { MUSCLE_GROUP_LABELS } from "@/data/exercises";
+import { getExerciseImageUrl } from "@/lib/exercises";
 import type { Exercise } from "@/types";
 
 export function ExerciseSheet({
@@ -11,14 +12,12 @@ export function ExerciseSheet({
   onClose,
   exercises,
   title = "Add exercises",
-  confirmLabel = "Add",
   onConfirm,
 }: {
   open: boolean;
   onClose: () => void;
   exercises: Exercise[];
   title?: string;
-  confirmLabel?: string;
   onConfirm: (ids: string[]) => Promise<void> | void;
 }) {
   const [query, setQuery] = useState("");
@@ -63,7 +62,7 @@ export function ExerciseSheet({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col justify-end">
+    <div className="fixed inset-0 z-60 flex flex-col justify-end">
       <div
         className="absolute inset-0 bg-black/60"
         onClick={handleClose}
@@ -105,7 +104,8 @@ export function ExerciseSheet({
           ) : (
             <ul className="flex flex-col gap-1">
               {filtered.map((exercise) => {
-                const isSelected = selected.includes(exercise.id);
+                const selectedIndex = selected.indexOf(exercise.id);
+                const isSelected = selectedIndex !== -1;
                 return (
                   <li key={exercise.id}>
                     <button
@@ -114,21 +114,32 @@ export function ExerciseSheet({
                       className="flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors"
                       style={{
                         borderColor: isSelected
-                          ? "var(--text-link)"
+                          ? "var(--text-accent)"
                           : "transparent",
                       }}
                     >
-                      <span className="flex flex-col">
-                        <span className="font-pixel text-sm font-semibold">
-                          {exercise.name}
-                        </span>
-                        <span className="text-xs text-(--text-muted)">
-                          {MUSCLE_GROUP_LABELS[exercise.primary_muscle]}
+                      <span className="flex items-center gap-3">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={getExerciseImageUrl(exercise)}
+                          alt=""
+                          width={40}
+                          height={40}
+                          loading="lazy"
+                          className="h-10 w-10 shrink-0 rounded-md border border-(--bg-input) bg-(--bg-input) object-contain p-1"
+                        />
+                        <span className="flex flex-col">
+                          <span className="font-pixel text-sm font-semibold">
+                            {exercise.name}
+                          </span>
+                          <span className="text-xs text-(--text-muted)">
+                            {MUSCLE_GROUP_LABELS[exercise.primary_muscle]}
+                          </span>
                         </span>
                       </span>
                       {isSelected ? (
-                        <span className="font-pixel text-sm font-semibold text-(--text-link)">
-                          ✓
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-(--button-bg) font-mono text-xs font-semibold text-white">
+                          {selectedIndex + 1}
                         </span>
                       ) : null}
                     </button>
@@ -144,11 +155,13 @@ export function ExerciseSheet({
             type="button"
             disabled={selected.length === 0 || pending}
             onClick={handleConfirm}
-            className="h-10 w-full rounded-md bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover) disabled:cursor-not-allowed disabled:opacity-60"
+            className="h-10 w-full rounded-md bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover) disabled:cursor-not-allowed disabled:opacity-40"
           >
             {pending
               ? "Adding..."
-              : `${confirmLabel}${selected.length ? ` (${selected.length})` : ""}`}
+              : selected.length > 0
+                ? `Add ${selected.length} ${selected.length === 1 ? "Exercise" : "Exercises"}`
+                : "Add Exercises"}
           </button>
         </div>
       </div>

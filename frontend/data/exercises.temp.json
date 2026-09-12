@@ -1,0 +1,50 @@
+[
+  {
+    "id": "00000000-0000-0000-0000-000000000011",
+    "name": "Dumbell Incline Bench Press",
+    "primary_muscle": "CHEST",
+    "secondary_muscles": ["FRONT_DELTS", "TRICEPS"],
+    "equipment": "DUMBBELL",
+    "media_url": "http://localhost:3000/icon-apex.svg"
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000012",
+    "name": "Single Arm Cable Lateral Raise",
+    "primary_muscle": "SIDE_DELTS",
+    "secondary_muscles": [],
+    "equipment": "CABLE",
+    "media_url": "http://localhost:3000/icon-apex.svg"
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000013",
+    "name": "Machine Seated Shoulder Press",
+    "primary_muscle": "FRONT_DELTS",
+    "secondary_muscles": ["SIDE_DELTS", "TRICEPS"],
+    "equipment": "MACHINE",
+    "media_url": "http://localhost:3000/icon-apex.svg"
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000014",
+    "name": "Machine Pec Deck",
+    "primary_muscle": "CHEST",
+    "secondary_muscles": ["FRONT_DELTS"],
+    "equipment": "MACHINE",
+    "media_url": "http://localhost:3000/icon-apex.svg"
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000015",
+    "name": "Overhead Cable Tricep Extension",
+    "primary_muscle": "TRICEPS",
+    "secondary_muscles": [],
+    "equipment": "CABLE",
+    "media_url": "http://localhost:3000/icon-apex.svg"
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000016",
+    "name": "Machine JM Press",
+    "primary_muscle": "TRICEPS",
+    "secondary_muscles": ["CHEST", "FRONT_DELTS"],
+    "equipment": "MACHINE",
+    "media_url": "http://localhost:3000/icon-apex.svg"
+  }
+]
