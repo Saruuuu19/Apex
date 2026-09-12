@@ -18,7 +18,7 @@ export async function login(
 ): Promise<AuthFormState> {
   const username = String(formData.get("identifier") ?? "");
   const password = String(formData.get("password") ?? "");
-  let next = "/workout";
+  let next = "/home/dashboard";
 
   try {
     const res = await fetch(`${API_BASE_URL}/auth/login`, {

@@ -55,7 +55,7 @@ function clearSession(response: NextResponse) {
 async function refreshAndRedirect(
   request: NextRequest,
   refreshToken: string,
-  goToRoutines: boolean,
+  goToDashboard: boolean,
 ): Promise<NextResponse> {
   try {
     const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
@@ -72,8 +72,8 @@ async function refreshAndRedirect(
 
     const { access_token, refresh_token } = await res.json();
 
-    const target = goToRoutines
-      ? new URL("/workout", request.url)
+    const target = goToDashboard
+      ? new URL("/home/dashboard", request.url)
       : request.nextUrl.clone();
     const response = NextResponse.redirect(target);
     response.cookies.set(ACCESS_COOKIE, access_token, ACCESS_COOKIE_OPTIONS);
@@ -107,7 +107,7 @@ export function proxy(request: NextRequest) {
 
   if (isAuthPage) {
     if (accessToken && !accessExpiring) {
-      return NextResponse.redirect(new URL("/workout", request.url));
+      return NextResponse.redirect(new URL("/home/dashboard", request.url));
     }
     if (refreshToken) {
       return refreshAndRedirect(request, refreshToken, true);
