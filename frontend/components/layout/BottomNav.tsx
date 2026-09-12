@@ -34,7 +34,7 @@ export function BottomNav() {
             className={cn(
               "flex flex-1 flex-col items-center justify-center gap-1 transition-colors duration-200",
               active
-                ? "text-(--text-link)"
+                ? "text-(--text-accent)"
                 : "text-(--text-muted) hover:text-(--text)",
             )}
           >

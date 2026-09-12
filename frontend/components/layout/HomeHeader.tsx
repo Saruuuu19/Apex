@@ -34,7 +34,7 @@ export function HomeHeader() {
             >
               {label}
               {active && (
-                <span className="absolute inset-x-4 bottom-2 h-0.5 rounded-full bg-(--text-link)" />
+                <span className="absolute inset-x-4 bottom-2 h-0.5 rounded-full bg-(--text-accent)" />
               )}
             </Link>
           );

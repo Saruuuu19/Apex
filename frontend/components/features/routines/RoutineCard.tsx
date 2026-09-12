@@ -12,7 +12,7 @@ export function RoutineCard({ routine }: { routine: Routine }) {
   return (
     <Link
       href={`/workout/routines/${routine.id}`}
-      className="flex w-full flex-col items-start gap-1 rounded-lg border-2 border-(--bg-input) px-5 py-4 transition-colors hover:border-(--text-link)"
+      className="flex w-full flex-col items-start gap-1 rounded-lg border-2 border-(--bg-input) px-5 py-4 transition-colors hover:border-(--text-accent)"
     >
       <span className="font-pixel text-sm font-semibold">{routine.name}</span>
       <span className="text-xs text-(--text-muted)">
