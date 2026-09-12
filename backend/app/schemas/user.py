@@ -35,3 +35,11 @@ class UserResponse(BaseModel):
     email: EmailStr
 
     created_at: datetime
+
+
+class UserPublic(BaseModel):
+    """Public user info for social contexts (no email)."""
+
+    model_config = ConfigDict(from_attributes=True)
+    id: UUID
+    username: str

@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from starlette.middleware.sessions import SessionMiddleware
@@ -13,12 +14,16 @@ from app.routers.user import router as users_router
 from app.routers.workouts import router as workout_sessions_router
 from app.routers.routine_exercises import router as routine_exercises_router
 from app.routers.feed import router as feed_router
+from app.routers.uploads import router as uploads_router
 
 app = FastAPI(
     title="Apex API",
     description="API for the Apex application",
     version="0.1.0",
 )
+
+settings.MEDIA_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/media", StaticFiles(directory=settings.MEDIA_DIR), name="media")
 
 # CORS Config
 origins = ["http://localhost:3000", "https://localhost:3000"]
@@ -48,3 +53,4 @@ app.include_router(users_router)
 app.include_router(workout_sessions_router)
 app.include_router(routine_exercises_router)
 app.include_router(feed_router)
+app.include_router(uploads_router)

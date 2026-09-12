@@ -205,7 +205,9 @@ def complete_workout_session(
     post = WorkoutPost(
         user_id=current_user.id,
         workout_session_id=workout_session.id,
+        title=payload.title if payload else None,
         caption=payload.caption if payload else None,
+        image_url=payload.image_url if payload else None,
         performed_at=workout_session.started_at,
     )
 

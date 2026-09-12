@@ -54,6 +54,7 @@ frontend/.env
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+backend/media/
 htmlcov/
 .tox/
 .coverage

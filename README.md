@@ -9,6 +9,7 @@ Hoy Apex se centra en el **tracking de entrenamiento**: crear rutinas, convertir
 - **Rutinas** — plantillas de entrenamiento reutilizables con ejercicios y series objetivo (reps, peso, tipo de serie).
 - **Sesiones de entrenamiento** — se crean a partir de una rutina (copia desacoplada) o en blanco; se completan cuando terminas.
 - **Registro de series** — cada set guarda reps, peso y RPE realizados durante el entrenamiento.
+- **Historial y feed** — al completar un entrenamiento se publica un post con título, caption e imagen opcional; el feed muestra las sesiones completadas con duración, series y volumen.
 - **Catálogo de ejercicios** — base de datos de ejercicios con músculo principal, secundarios y equipamiento (gestionada por dev).
 - **Autenticación JWT** — registro, login y sesiones por usuario con refresh token rotativo (httpOnly), detección de reuso, y rate-limiting en login/registro.
 
@@ -138,8 +139,11 @@ Recursos principales:
 - `/routines` — CRUD de rutinas y sus ejercicios/series
 - `/workout-sessions` — creación, inicio desde rutina, registro de sets y completado
 - `/exercises` — catálogo de ejercicios
+- `/feed` — posts de entrenamientos completados; `POST /uploads/post-image` — subida de la foto del post
 - `/me/...` — rutinas y sesiones del usuario autenticado
 
 ## Próximamente
 
 Apex es un "sistema operativo personal": además del tracking de entrenamiento, se irán añadiendo nuevos módulos de productividad. Este espacio crecerá con el roadmap.
+
+En el corto plazo, para el feed: tracking de **récords/PRs** (hoy las cards muestran volumen total en su lugar) y **almacenamiento externo** (CDN/bucket) para las fotos de los posts, que hoy se guardan en local (`backend/media/`).

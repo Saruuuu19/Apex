@@ -47,6 +47,8 @@ class WorkoutPost(Base):
         nullable=True,
     )
     caption: Mapped[str | None] = mapped_column(String, nullable=True)
+    title: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    image_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
     performed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     published_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(UTC)
