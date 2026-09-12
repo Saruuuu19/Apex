@@ -1,6 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { Lock, Mail, User } from "lucide-react";
 
 import { register } from "@/lib/auth";
@@ -13,6 +15,14 @@ export function RegisterForm() {
 
   return (
     <form action={action} className="flex flex-col">
+      <Image
+        src="/logo-apex.svg"
+        alt="Apex logo"
+        width={170}
+        height={150}
+        priority
+        className="mx-auto mb-10 h-20 w-20"
+      />
       <h1 className="mb-6 text-center font-pixel text-2xl font-semibold text-(--text)">
         Create Account
       </h1>
@@ -136,7 +146,7 @@ export function RegisterForm() {
       <button
         type="submit"
         disabled={pending}
-        className="mt-6 h-10 w-full rounded-md bg-(--button-bg) font-bold text-(--text-accent) transition-colors hover:bg-(--button-bg-hover) disabled:cursor-not-allowed disabled:opacity-60"
+        className="mt-6 h-10 w-full rounded-md bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover) disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "Creating account..." : "Create Account"}
       </button>
@@ -160,6 +170,13 @@ export function RegisterForm() {
           Sign up with Google
         </a>
       </div>
+
+      <p className="mt-6 text-center font-mono text-sm text-(--text-muted)">
+        Already have an account?{" "}
+        <Link href="/login" className="text-(--text-accent) hover:underline">
+          Log in
+        </Link>
+      </p>
     </form>
   );
 }

@@ -1,6 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { Lock, Mail } from "lucide-react";
 
 import { login } from "@/lib/auth";
@@ -13,6 +15,14 @@ export function LoginForm({ defaultNext }: { defaultNext?: string }) {
 
   return (
     <form action={action} className="flex flex-col">
+      <Image
+        src="/logo-apex.svg"
+        alt="Apex logo"
+        width={40}
+        height={40}
+        priority
+        className="mx-auto mb-10 h-20 w-20"
+      />
       <h1 className="mb-6 text-center font-pixel text-2xl font-semibold text-(--text)">
         Log In
       </h1>
@@ -80,7 +90,7 @@ export function LoginForm({ defaultNext }: { defaultNext?: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="mt-6 h-10 w-full rounded-md bg-(--button-bg) font-bold text-(--text-accent) transition-colors hover:bg-(--button-bg-hover) disabled:cursor-not-allowed disabled:opacity-60"
+        className="mt-6 h-10 w-full rounded-md bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover) disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "Logging in..." : "Log in"}
       </button>
@@ -104,6 +114,13 @@ export function LoginForm({ defaultNext }: { defaultNext?: string }) {
           Log in with Google
         </a>
       </div>
+
+      <p className="mt-6 text-center font-mono text-sm text-(--text-muted)">
+        Don&apos;t have an account?{" "}
+        <Link href="/register" className="text-(--text-accent) hover:underline">
+          Create your account
+        </Link>
+      </p>
     </form>
   );
 }
