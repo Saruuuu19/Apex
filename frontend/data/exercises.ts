@@ -1,67 +1,47 @@
-import type { Equipment, Exercise, MuscleGroup, SetType } from "@/types";
+import type { Equipment, MuscleGroup, SetType } from "@/types";
 
 export const MUSCLE_GROUP_LABELS: Record<MuscleGroup, string> = {
-  CHEST: "Pecho",
-  LATS: "Dorsales",
-  UPPER_BACK: "Espalda alta",
-  BICEPS: "Bíceps",
-  TRICEPS: "Tríceps",
-  FOREARMS: "Antebrazos",
-  FRONT_DELTS: "Deltoides frontal",
-  SIDE_DELTS: "Deltoides lateral",
-  REAR_DELTS: "Deltoides posterior",
-  QUADS: "Cuádriceps",
-  HAMSTRINGS: "Isquios",
-  GLUTES: "Glúteos",
-  CALVES: "Gemelos",
-  ADDUCTORS: "Aductores",
-  ABDUCTORS: "Abductores",
-  ABS: "Abdominales",
-  OBLIQUES: "Oblicuos",
-  LOWER_BACK: "Lumbar",
+  CHEST: "Chest",
+  LATS: "Lats",
+  UPPER_BACK: "Upper Back",
+  BICEPS: "Biceps",
+  TRICEPS: "Triceps",
+  FOREARMS: "Forearms",
+  FRONT_DELTS: "Front delts",
+  SIDE_DELTS: "Side delts",
+  REAR_DELTS: "Rear delts",
+  QUADS: "Cuadriceps",
+  HAMSTRINGS: "Hamstrings",
+  GLUTES: "Glutes",
+  CALVES: "Calves",
+  ADDUCTORS: "Adductors",
+  ABDUCTORS: "Abductors",
+  ABS: "Abs",
+  OBLIQUES: "Obliques",
+  LOWER_BACK: "Lower Back",
   CARDIO: "Cardio",
 };
 
 export const EQUIPMENT_LABELS: Record<Equipment, string> = {
-  NONE: "Peso corporal",
-  BARBELL: "Barra",
-  DUMBBELL: "Mancuernas",
+  NONE: "Bodyweight",
+  BARBELL: "Barbell",
+  DUMBBELL: "Dumbell",
   KETTLEBELL: "Kettlebell",
-  CABLE: "Polea",
-  MACHINE: "Máquina",
-  PLATE: "Disco",
+  CABLE: "Cable",
+  MACHINE: "Machine",
+  PLATE: "Plate",
 };
 
 export const SET_TYPE_LABELS: Record<SetType, string> = {
-  WARM_UP: "Calentamiento",
+  WARM_UP: "Warm Up",
   NORMAL: "Normal",
-  DROP_SET: "Drop set",
-  FAILURE: "Al fallo",
+  DROP_SET: "Drop Set",
+  FAILURE: "Failure",
 };
 
-export const mockExercises = [
-  {
-    id: "00000000-0000-0000-0000-000000000001",
-    name: "Press banca",
-    primary_muscle: "CHEST" as MuscleGroup,
-    secondary_muscles: ["TRICEPS", "FRONT_DELTS"] as MuscleGroup[],
-    equipment: "BARBELL" as Equipment,
-    media_url: null,
-  },
-  {
-    id: "00000000-0000-0000-0000-000000000002",
-    name: "Sentadilla",
-    primary_muscle: "QUADS" as MuscleGroup,
-    secondary_muscles: ["GLUTES", "HAMSTRINGS"] as MuscleGroup[],
-    equipment: "BARBELL" as Equipment,
-    media_url: null,
-  },
-  {
-    id: "00000000-0000-0000-0000-000000000003",
-    name: "Dominadas",
-    primary_muscle: "LATS" as MuscleGroup,
-    secondary_muscles: ["BICEPS"] as MuscleGroup[],
-    equipment: "NONE" as Equipment,
-    media_url: null,
-  },
-] as Exercise[];
+export const SET_TYPE_ABBR: Record<SetType, string> = {
+  WARM_UP: "W",
+  NORMAL: "N",
+  DROP_SET: "D",
+  FAILURE: "F",
+};

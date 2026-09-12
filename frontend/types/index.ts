@@ -84,6 +84,7 @@ export interface Set {
   reps: number | null;
   weight: number | null;
   rpe: number | null;
+  completed: boolean;
 }
 
 export interface WorkoutExercise {

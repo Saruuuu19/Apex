@@ -91,6 +91,7 @@ export type WorkoutSetPatch = {
   reps?: number | null;
   weight?: number | null;
   rpe?: number | null;
+  completed?: boolean;
 };
 
 export const api = {
@@ -154,7 +155,11 @@ export const api = {
     apiFetch<WorkoutSession>(`/workout-sessions/${id}`),
   addWorkoutExercise: (
     sessionId: string,
-    body: { exercise_id: string; order: number },
+    body: {
+      exercise_id: string;
+      order: number;
+      sets?: WorkoutSetCreateBody[];
+    },
   ) =>
     apiFetch<WorkoutExercise>(`/workout-sessions/${sessionId}/exercises`, {
       method: "POST",

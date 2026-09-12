@@ -82,6 +82,14 @@ export async function addExercisesToRoutine(
     await api.addRoutineExercise(routineId, {
       exercise_id: exerciseIds[i],
       order: startOrder + i,
+      routine_sets: [
+        {
+          order: 0,
+          target_reps: null,
+          target_weight: null,
+          set_type: "NORMAL",
+        },
+      ],
     });
   }
   revalidatePath(`/workout/routines/${routineId}`);
@@ -139,6 +147,15 @@ export async function addExercisesToWorkout(
     await api.addWorkoutExercise(sessionId, {
       exercise_id: exerciseIds[i],
       order: startOrder + i,
+      sets: [
+        {
+          order: 0,
+          set_type: "NORMAL",
+          reps: null,
+          weight: null,
+          rpe: null,
+        },
+      ],
     });
   }
   revalidatePath(`/workout/${sessionId}`);
