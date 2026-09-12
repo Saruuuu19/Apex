@@ -19,6 +19,7 @@ class SetUpdate(BaseModel):
     weight: Decimal | None = None
     rpe: Decimal | None = Field(default=None, ge=7, le=10)
     set_type: SetType | None = None
+    completed: bool | None = None
 
 
 class SetResponse(BaseModel):
@@ -30,4 +31,5 @@ class SetResponse(BaseModel):
     set_type: SetType
     reps: int | None = None
     weight: Decimal | None = None
-    rpe: Decimal | None = Field(default=None, ge=7, le=10)
+    rpe: Decimal | None = None
+    completed: bool = False

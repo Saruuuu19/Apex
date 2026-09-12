@@ -29,5 +29,6 @@ class Set(Base):
     reps: Mapped[int | None] = mapped_column(nullable=True)
     weight: Mapped[Decimal | None] = mapped_column(Numeric(6, 2), nullable=True)
     rpe: Mapped[Decimal | None] = mapped_column(Numeric(3, 1), nullable=True)
+    completed: Mapped[bool] = mapped_column(default=False, nullable=False)
 
     workout_exercise: Mapped["WorkoutExercise"] = relationship(back_populates="sets")
