@@ -1,14 +1,14 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.schemas.workout_exercise import WorkoutExerciseCreate, WorkoutExerciseResponse
 
 
 class WorkoutSessionCreate(BaseModel):
     routine_id: UUID | None = None
-    workout_exercises: list[WorkoutExerciseCreate]
+    workout_exercises: list[WorkoutExerciseCreate] = Field(default_factory=list)
 
 
 class WorkoutSessionResponse(BaseModel):

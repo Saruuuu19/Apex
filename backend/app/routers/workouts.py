@@ -3,6 +3,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, joinedload, selectinload
 
 from app.core.dependencies import get_current_user
@@ -25,6 +26,16 @@ from app.models.workout_post import WorkoutPost
 
 
 router = APIRouter(prefix="/workout-sessions", tags=["workout-sessions"])
+
+
+def _commit_or_conflict(db: Session, detail: str) -> None:
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail=detail
+        ) from exc
 
 
 @router.post(
@@ -105,7 +116,7 @@ def create_workout_session_from_routine(
 
     db.add(workout_session)
 
-    db.commit()
+    _commit_or_conflict(db, "The routine contains duplicate exercise or set orders")
 
     db.refresh(workout_session)
 
@@ -164,7 +175,7 @@ def add_workout_exercise(
     )
 
     db.add(db_workout_exercise)
-    db.commit()
+    _commit_or_conflict(db, "An exercise with the same order already exists")
     db.refresh(db_workout_exercise)
 
     return db_workout_exercise
@@ -181,7 +192,16 @@ def complete_workout_session(
     payload: WorkoutPostCreate | None = Body(default=None),
     db: Session = Depends(get_db),
 ):
-    workout_session = db.get(WorkoutSession, id)
+    workout_session = db.get(
+        WorkoutSession,
+        id,
+        options=[
+            selectinload(WorkoutSession.workout_exercises).selectinload(
+                WorkoutExercise.sets
+            )
+        ],
+        with_for_update=True,
+    )
 
     if not workout_session:
         raise HTTPException(
@@ -200,6 +220,27 @@ def complete_workout_session(
             detail="Workout session is already completed",
         )
 
+    if not workout_session.workout_exercises:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Add at least one exercise before completing the workout",
+        )
+
+    has_valid_set = any(
+        db_set.completed
+        and db_set.reps is not None
+        and db_set.reps > 0
+        and db_set.weight is not None
+        and db_set.weight >= 0
+        for workout_exercise in workout_session.workout_exercises
+        for db_set in workout_exercise.sets
+    )
+    if not has_valid_set:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Your workout has missing set values",
+        )
+
     workout_session.completed_at = datetime.now(UTC)
 
     post = WorkoutPost(
@@ -212,7 +253,7 @@ def complete_workout_session(
     )
 
     db.add(post)
-    db.commit()
+    _commit_or_conflict(db, "Workout session is already completed")
     db.refresh(workout_session)
 
     return workout_session
@@ -239,11 +280,9 @@ def delete_workout_session(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to delete this workout session",
         )
-    if db_workout_session.completed_at is not None:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Cannot delete a completed workout session",
-        )
+
+    for post in list(db_workout_session.workout_posts):
+        db.delete(post)
 
     db.delete(db_workout_session)
     db.commit()
@@ -292,7 +331,7 @@ def add_set(
     )
 
     db.add(new_set)
-    db.commit()
+    _commit_or_conflict(db, "A set with the same order already exists")
     db.refresh(new_set)
 
     return new_set
@@ -371,7 +410,7 @@ def update_workout_exercise(
     for field, value in update_data.items():
         setattr(db_workout_exercise, field, value)
 
-    db.commit()
+    _commit_or_conflict(db, "An exercise with the same order already exists")
     db.refresh(db_workout_exercise)
 
     return db_workout_exercise
@@ -416,7 +455,7 @@ def update_set(
     for field, value in update_data.items():
         setattr(db_set, field, value)
 
-    db.commit()
+    _commit_or_conflict(db, "A set with the same order already exists")
 
     db.refresh(db_set)
 
@@ -483,6 +522,11 @@ def remove_workout_exercise(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to delete this workout exercise",
+        )
+    if db_workout_exercise.workout_session.completed_at is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Cannot modify a completed workout session",
         )
 
     db.delete(db_workout_exercise)

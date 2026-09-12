@@ -45,6 +45,7 @@ class WorkoutPost(Base):
         SqlUUID(as_uuid=True),
         ForeignKey("workout_sessions.id", ondelete="SET NULL"),
         nullable=True,
+        unique=True,
     )
     caption: Mapped[str | None] = mapped_column(String, nullable=True)
     title: Mapped[str | None] = mapped_column(String(100), nullable=True)
