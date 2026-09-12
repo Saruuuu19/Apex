@@ -8,6 +8,7 @@ import type {
   Set,
   User,
   WorkoutExercise,
+  WorkoutPost,
   WorkoutSession,
 } from "@/types";
 
@@ -196,6 +197,7 @@ export const api = {
     apiFetch<void>(`/workout-sessions/${id}`, { method: "DELETE" }),
 
   // Feed & uploads
+  getFeed: () => apiFetch<WorkoutPost[]>("/feed"),
   uploadPostImage: (file: File) => {
     const formData = new FormData();
     formData.append("image", file);

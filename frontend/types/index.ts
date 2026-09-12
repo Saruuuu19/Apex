@@ -37,6 +37,11 @@ export interface User {
   created_at: string;
 }
 
+export interface UserPublic {
+  id: string;
+  username: string;
+}
+
 export interface TokenPairResponse {
   access_token: string;
   refresh_token: string;
@@ -102,4 +107,18 @@ export interface WorkoutSession {
   started_at: string;
   completed_at: string | null;
   workout_exercises: WorkoutExercise[];
+}
+
+export interface WorkoutPost {
+  id: string;
+  user_id: string;
+  user: UserPublic;
+  workout_session_id: string | null;
+  title: string | null;
+  image_url: string | null;
+  caption: string | null;
+  performed_at: string;
+  published_at: string;
+  workout_session: WorkoutSession | null;
+  duration_seconds: number | null;
 }
