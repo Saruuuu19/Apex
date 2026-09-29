@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { CompleteWorkoutSheet } from "@/components/features/workout-sessions/CompleteWorkoutSheet";
 import { ActiveWorkout } from "@/components/features/workout-sessions/ActiveWorkout";
+import { SessionTimer } from "@/components/features/workout-sessions/SessionTimer";
 import type { Exercise, WorkoutSession } from "@/types";
 
 export function WorkoutSessionEditor({
@@ -24,7 +25,13 @@ export function WorkoutSessionEditor({
       <header className="flex w-full items-start justify-between gap-4">
         <div className="flex flex-col">
           <h1 className="font-pixel text-3xl font-bold">Workout</h1>
-          <p className="text-sm text-(--text-muted)">{startedAtLabel}</p>
+          <p className="text-sm text-(--text-muted)">
+            {startedAtLabel}
+            <SessionTimer
+              startedAt={session.started_at}
+              endedAt={session.completed_at}
+            />
+          </p>
         </div>
 
         {readOnly ? null : (

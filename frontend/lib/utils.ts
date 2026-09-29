@@ -11,6 +11,19 @@ export function parseNumberOrNull(value: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
+export function formatElapsedTime(totalSeconds: number): string {
+  const seconds = Math.max(0, Math.floor(totalSeconds));
+  if (seconds < 60) return `${seconds}s`;
+
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const rest = seconds % 60;
+  const pad = (value: number) => String(value).padStart(2, "0");
+
+  if (hours > 0) return `${hours}:${pad(minutes)}:${pad(rest)}`;
+  return `${minutes}:${pad(rest)}`;
+}
+
 export function workoutCompletionError(
   session: WorkoutSession,
 ): string | null {
