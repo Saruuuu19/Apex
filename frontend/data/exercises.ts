@@ -46,6 +46,13 @@ export const SET_TYPE_ABBR: Record<SetType, string> = {
   FAILURE: "F",
 };
 
+export const SET_TYPE_DESCRIPTIONS: Record<SetType, string> = {
+  WARM_UP: "Light set to prepare for the working weight",
+  NORMAL: "Standard working set",
+  DROP_SET: "Reduce the weight right after failure and keep going",
+  FAILURE: "Taken all the way to muscular failure",
+};
+
 export const SET_TYPE_TEXT: Record<SetType, string> = {
   WARM_UP: "text-(--set-warmup)",
   NORMAL: "text-(--text)",

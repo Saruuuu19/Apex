@@ -5,6 +5,7 @@ import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import { Check, Gauge, Trash2 } from "lucide-react";
 
 import { RpeSheet } from "@/components/features/exercises/RpeSheet";
+import { SetTypeSheet } from "@/components/features/exercises/SetTypeSheet";
 import {
   SET_TYPE_ABBR,
   SET_TYPE_LABELS,
@@ -110,6 +111,7 @@ function SetRow({
 }) {
   const [dragOffset, setDragOffset] = useState<number | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [typeSheetOpen, setTypeSheetOpen] = useState(false);
   const setNumber = index + 1;
   const offset = dragOffset ?? (open ? -DELETE_WIDTH : 0);
   const drag = useRef<{
@@ -183,28 +185,23 @@ function SetRow({
         onPointerUp={handlePointerEnd}
         onPointerCancel={handlePointerEnd}
       >
-        <select
-          value={row.set_type}
+        <button
+          type="button"
           disabled={disabled || busy}
-          aria-label="Set type"
+          aria-label={`Set type: ${SET_TYPE_LABELS[row.set_type]}`}
+          aria-haspopup="dialog"
           title={`Set type: ${SET_TYPE_LABELS[row.set_type]}`}
-          onChange={(event) =>
-            onUpdate(row.id, { set_type: event.target.value as SetType })
-          }
+          onClick={() => setTypeSheetOpen(true)}
           className={cn(
-            "h-9 w-9 appearance-none rounded-md text-center font-mono text-xs disabled:opacity-40",
+            "h-9 w-9 rounded-md text-center font-mono text-xs disabled:opacity-40",
             SET_TYPE_TEXT[row.set_type],
             flat
               ? "focus-visible:bg-(--bg-input-hover)"
               : "border border-(--bg-input) bg-(--bg-input)",
           )}
         >
-          {Object.entries(SET_TYPE_ABBR).map(([value, abbr]) => (
-            <option key={value} value={value}>
-              {value === "NORMAL" ? setNumber : abbr}
-            </option>
-          ))}
-        </select>
+          {row.set_type === "NORMAL" ? setNumber : SET_TYPE_ABBR[row.set_type]}
+        </button>
 
         <NumberInput
           label="Weight (kg)"
@@ -290,6 +287,20 @@ function SetRow({
           <Trash2 className="h-4 w-4" />
         </button>
       </div>
+
+      {typeSheetOpen ? (
+        <SetTypeSheet
+          setNumber={setNumber}
+          weight={formatNumber(row.weight)}
+          reps={formatNumber(row.reps)}
+          value={row.set_type}
+          onClose={() => setTypeSheetOpen(false)}
+          onConfirm={(type) => {
+            if (type !== row.set_type) onUpdate(row.id, { set_type: type });
+            setTypeSheetOpen(false);
+          }}
+        />
+      ) : null}
     </li>
   );
 }
