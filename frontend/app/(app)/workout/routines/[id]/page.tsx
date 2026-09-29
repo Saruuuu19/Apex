@@ -48,7 +48,7 @@ export default async function RoutineDetailPage({
           <form action={startAction} className="w-full">
             <button
               type="submit"
-              className="h-10 w-full rounded-md bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover)"
+              className="h-10 w-full rounded-3xl bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover)"
             >
               Start Workout
             </button>
@@ -56,7 +56,7 @@ export default async function RoutineDetailPage({
           <form action={deleteAction} className="w-full">
             <button
               type="submit"
-              className="h-10 w-full rounded-md border border-(--text-danger) font-bold text-(--text-danger) transition-colors hover:bg-(--text-danger)/10"
+              className="h-10 w-full rounded-3xl border border-(--text-danger) font-bold text-(--text-danger) transition-colors hover:bg-(--text-danger)/10"
             >
               Delete Routine
             </button>

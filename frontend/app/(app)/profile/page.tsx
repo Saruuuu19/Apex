@@ -11,7 +11,7 @@ export default function ProfilePage() {
       <form action={logout} className="mt-6">
         <button
           type="submit"
-          className="h-10 w-full rounded-md border border-(--text-danger) font-bold text-(--text-danger) transition-colors hover:bg-(--text-danger)/10"
+          className="h-10 w-full rounded-3xl border border-(--text-danger) font-bold text-(--text-danger) transition-colors hover:bg-(--text-danger)/10"
         >
           Log out
         </button>

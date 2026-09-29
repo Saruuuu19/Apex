@@ -130,7 +130,7 @@ export function RoutineExercises({
                       ),
                     )
                   }
-                  className="flex h-8 items-center justify-center gap-1 rounded-md border border-(--bg-input) text-xs font-mono text-(--text-secondary) hover:bg-(--bg-input) disabled:opacity-60"
+                  className="flex h-8 items-center justify-center gap-1 rounded-3xl border border-(--bg-input) text-xs font-mono text-(--text-secondary) hover:bg-(--bg-input) disabled:opacity-60"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   Add set
@@ -145,7 +145,7 @@ export function RoutineExercises({
         type="button"
         onClick={() => setSheetOpen(true)}
         disabled={isPending}
-        className="h-10 w-full rounded-md border border-(--bg-surface) bg-(--bg-surface) font-bold transition-colors hover:bg-(--bg-surface-hover) disabled:opacity-60"
+        className="h-10 w-full rounded-3xl border border-(--bg-surface) bg-(--bg-surface) font-bold transition-colors hover:bg-(--bg-surface-hover) disabled:opacity-60"
       >
         Add exercise
       </button>

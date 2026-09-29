@@ -21,7 +21,7 @@ export default async function FeedPage() {
             </p>
             <Link
               href="/workout"
-              className="mt-3 h-10 rounded-md bg-(--button-bg) px-5 leading-10 font-bold text-white transition-colors hover:bg-(--button-bg-hover)"
+              className="mt-3 h-10 rounded-3xl bg-(--button-bg) px-5 leading-10 font-bold text-white transition-colors hover:bg-(--button-bg-hover)"
             >
               Start a workout
             </Link>

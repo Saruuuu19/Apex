@@ -19,7 +19,7 @@ export default async function WorkoutPage() {
           <form action={createEmptyWorkout} className="w-full">
             <button
               type="submit"
-              className="h-10 w-full rounded-md bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover)"
+              className="h-10 w-full rounded-3xl bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover)"
             >
               Start New Empty Workout
             </button>
@@ -30,7 +30,7 @@ export default async function WorkoutPage() {
           <h2 className="font-pixel text-2xl font-bold">Your Routines</h2>
           <Link
             href="/workout/routines/new"
-            className="flex h-10 w-full items-center justify-center rounded-md border border-(--bg-surface) bg-(--bg-surface) font-bold transition-colors hover:bg-(--bg-surface-hover)"
+            className="flex h-10 w-full items-center justify-center rounded-3xl border border-(--bg-surface) bg-(--bg-surface) font-bold transition-colors hover:bg-(--bg-surface-hover)"
           >
             New Routine
           </Link>

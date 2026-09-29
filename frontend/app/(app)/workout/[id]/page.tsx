@@ -57,7 +57,7 @@ export default async function WorkoutSessionPage({
             <form action={discardWorkout.bind(null, id)} className="w-full">
               <button
                 type="submit"
-                className="h-10 w-full rounded-md bg-(--button-danger-bg) font-bold text-white transition-colors hover:bg-(--button-danger-bg-hover)"
+                className="h-10 w-full rounded-3xl bg-(--button-danger-bg) font-bold text-white transition-colors hover:bg-(--button-danger-bg-hover)"
               >
                 Discard workout
               </button>

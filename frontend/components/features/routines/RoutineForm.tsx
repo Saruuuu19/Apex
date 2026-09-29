@@ -39,7 +39,7 @@ export function RoutineForm({
           placeholder="Routine name"
           required
           maxLength={100}
-          className="h-10 w-full rounded-md border border-(--bg-input) bg-(--bg-input) px-3 font-mono text-(--text) placeholder:text-(--text-muted)"
+          className="h-10 w-full rounded-3xl border border-(--bg-input) bg-(--bg-input) px-3 font-mono text-(--text) placeholder:text-(--text-muted)"
         />
       </div>
 
@@ -52,7 +52,7 @@ export function RoutineForm({
       <button
         type="submit"
         disabled={pending}
-        className="h-10 w-full rounded-md bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover) disabled:cursor-not-allowed disabled:opacity-60"
+        className="h-10 w-full rounded-3xl bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover) disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "Saving..." : submitLabel}
       </button>
