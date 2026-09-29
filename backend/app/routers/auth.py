@@ -322,6 +322,18 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
     else:
         user = db.scalar(select(User).where(User.email == email)) if email else None
 
+        if user is not None and user.hashed_password is not None:
+            # Password accounts never verify their email, so anyone could have
+            # pre-registered this address. Google has just proven ownership:
+            # drop the unverified credentials and every existing session so a
+            # pre-registrant cannot keep access after the real owner links.
+            user.hashed_password = None
+            _revoke_all_sessions(db, user.id)
+            logger.warning(
+                "Google link on password account %s; credentials and sessions reset",
+                user.id,
+            )
+
         if user is None:
             user = User(
                 username=_unique_username(db, email),
