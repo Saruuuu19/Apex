@@ -10,8 +10,10 @@ import type { WorkoutSession } from "@/types";
 
 export function CompleteWorkoutSheet({
   session,
+  disabled = false,
 }: {
   session: WorkoutSession;
+  disabled?: boolean;
 }) {
   const sessionId = session.id;
   const [open, setOpen] = useState(false);
@@ -44,6 +46,7 @@ export function CompleteWorkoutSheet({
   }
 
   function handleOpen() {
+    if (disabled) return;
     const error = workoutCompletionError(session);
     if (error) {
       setAlert(error);
@@ -57,6 +60,7 @@ export function CompleteWorkoutSheet({
       <button
         type="button"
         onClick={handleOpen}
+        disabled={disabled}
         className="h-10 w-full rounded-md bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover)"
       >
         Complete Workout

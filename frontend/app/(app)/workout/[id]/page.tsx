@@ -1,9 +1,8 @@
 import { api } from "@/lib/api";
 import { getCatalogExercises } from "@/lib/exercises";
 import { discardWorkout } from "@/lib/actions/workout";
-import { ActiveWorkout } from "@/components/features/workout-sessions/ActiveWorkout";
-import { CompleteWorkoutSheet } from "@/components/features/workout-sessions/CompleteWorkoutSheet";
 import { DeleteWorkoutButton } from "@/components/features/workout-sessions/DeleteWorkoutButton";
+import { WorkoutSessionEditor } from "@/components/features/workout-sessions/WorkoutSessionEditor";
 
 export default async function WorkoutSessionPage({
   params,
@@ -28,13 +27,11 @@ export default async function WorkoutSessionPage({
           </p>
         </header>
 
-        <section className="flex w-full flex-col items-start gap-3">
-          <ActiveWorkout
-            session={session}
-            exercises={exercises}
-            readOnly={isCompleted}
-          />
-        </section>
+        <WorkoutSessionEditor
+          session={session}
+          exercises={exercises}
+          readOnly={isCompleted}
+        />
 
         {isCompleted ? (
           <div className="flex w-full flex-col items-center gap-3">
@@ -48,7 +45,6 @@ export default async function WorkoutSessionPage({
           </div>
         ) : (
           <>
-            <CompleteWorkoutSheet session={session} />
             {!hasExercises ? (
               <p className="w-full text-center text-xs text-(--text-muted)">
                 Add at least one exercise to complete the workout.

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useMemo, useRef, useState, useTransition } from "react";
 import { Plus } from "lucide-react";
 
 import { ExerciseCard } from "@/components/features/exercises/ExerciseCard";
@@ -19,14 +19,17 @@ export function ActiveWorkout({
   session,
   exercises,
   readOnly = false,
+  onPendingChange,
 }: {
   session: WorkoutSession;
   exercises: Exercise[];
   readOnly?: boolean;
+  onPendingChange?: (pending: boolean) => void;
 }) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const pendingMutations = useRef(0);
 
   const exerciseById = useMemo(
     () => new Map(exercises.map((exercise) => [exercise.id, exercise])),
@@ -35,11 +38,16 @@ export function ActiveWorkout({
 
   function run(action: () => Promise<void>) {
     setError(null);
+    pendingMutations.current += 1;
+    onPendingChange?.(true);
     startTransition(async () => {
       try {
         await action();
       } catch (err) {
         setError(err instanceof Error ? err.message : "Something went wrong");
+      } finally {
+        pendingMutations.current -= 1;
+        if (pendingMutations.current === 0) onPendingChange?.(false);
       }
     });
   }
