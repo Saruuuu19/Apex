@@ -61,9 +61,9 @@ export function CompleteWorkoutSheet({
         type="button"
         onClick={handleOpen}
         disabled={disabled}
-        className="h-10 w-full rounded-md bg-(--button-bg) font-bold text-white transition-colors hover:bg-(--button-bg-hover)"
+        className="h-10 shrink-0 rounded-3xl bg-(--button-bg) px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-(--button-bg-hover) disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Complete Workout
+        Finish
       </button>
 
       {alert ? (
@@ -124,7 +124,7 @@ export function CompleteWorkoutSheet({
                 type="text"
                 maxLength={100}
                 placeholder="Monday Workout 🏋️"
-                className="h-10 w-full rounded-md border border-(--bg-input) bg-(--bg-input) px-3 font-mono text-(--text) placeholder:text-(--text-muted)"
+                className="h-10 w-full rounded-3xl border border-(--bg-input) bg-(--bg-input) px-3 font-mono text-(--text) placeholder:text-(--text-muted)"
               />
             </div>
 
