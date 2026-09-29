@@ -5,7 +5,11 @@ import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import { Check, Gauge, Trash2 } from "lucide-react";
 
 import { RpeSheet } from "@/components/features/exercises/RpeSheet";
-import { SET_TYPE_ABBR, SET_TYPE_LABELS } from "@/data/exercises";
+import {
+  SET_TYPE_ABBR,
+  SET_TYPE_LABELS,
+  SET_TYPE_TEXT,
+} from "@/data/exercises";
 import { cn, parseNumberOrNull } from "@/lib/utils";
 import type { SetType } from "@/types";
 
@@ -77,6 +81,7 @@ function NumberInput({
 
 function SetRow({
   row,
+  index,
   showRpe,
   checkable,
   disabled,
@@ -90,6 +95,7 @@ function SetRow({
   onRemove,
 }: {
   row: SetTableRow;
+  index: number;
   showRpe: boolean;
   checkable: boolean;
   disabled: boolean;
@@ -104,6 +110,7 @@ function SetRow({
 }) {
   const [dragOffset, setDragOffset] = useState<number | null>(null);
   const [dragging, setDragging] = useState(false);
+  const setNumber = index + 1;
   const offset = dragOffset ?? (open ? -DELETE_WIDTH : 0);
   const drag = useRef<{
     x: number;
@@ -185,7 +192,8 @@ function SetRow({
             onUpdate(row.id, { set_type: event.target.value as SetType })
           }
           className={cn(
-            "h-9 w-9 appearance-none rounded-md text-center font-mono text-xs text-(--text) disabled:opacity-40",
+            "h-9 w-9 appearance-none rounded-md text-center font-mono text-xs disabled:opacity-40",
+            SET_TYPE_TEXT[row.set_type],
             flat
               ? "focus-visible:bg-(--bg-input-hover)"
               : "border border-(--bg-input) bg-(--bg-input)",
@@ -193,7 +201,7 @@ function SetRow({
         >
           {Object.entries(SET_TYPE_ABBR).map(([value, abbr]) => (
             <option key={value} value={value}>
-              {abbr}
+              {value === "NORMAL" ? setNumber : abbr}
             </option>
           ))}
         </select>
@@ -249,8 +257,8 @@ function SetRow({
             aria-pressed={row.completed}
             aria-label={
               row.completed
-                ? `Set ${row.order + 1} completed`
-                : `Mark set ${row.order + 1} as completed`
+                ? `Set ${setNumber} completed`
+                : `Mark set ${setNumber} as completed`
             }
             disabled={disabled || busy}
             onClick={() => onUpdate(row.id, { completed: !row.completed })}
@@ -273,7 +281,7 @@ function SetRow({
       <div className="absolute inset-y-0 right-0 flex w-18 items-center justify-center bg-(--button-danger-bg)">
         <button
           type="button"
-          aria-label={`Delete set ${row.order + 1}`}
+          aria-label={`Delete set ${setNumber}`}
           disabled={disabled || busy}
           onClick={() => onRemove(row.id)}
           onFocus={() => onOpenChange(true)}
@@ -316,6 +324,9 @@ export function SetTable({
   const rpeRow = rpeRowId
     ? sortedSets.find((set) => set.id === rpeRowId)
     : undefined;
+  const rpeRowNumber = rpeRow
+    ? sortedSets.findIndex((set) => set.id === rpeRow.id) + 1
+    : 0;
 
   const columns = ["2.25rem", "minmax(0,1fr)", "minmax(0,1fr)"];
   if (showRpe) columns.push("minmax(0,1fr)");
@@ -342,10 +353,11 @@ export function SetTable({
       </div>
 
       <ul className="flex flex-col gap-2">
-        {sortedSets.map((row) => (
+        {sortedSets.map((row, index) => (
           <SetRow
             key={row.id}
             row={row}
+            index={index}
             showRpe={showRpe}
             checkable={checkable}
             disabled={disabled}
@@ -364,7 +376,7 @@ export function SetTable({
       {rpeRow ? (
         <RpeSheet
           key={rpeRow.id}
-          setNumber={rpeRow.order + 1}
+          setNumber={rpeRowNumber}
           weight={formatNumber(rpeRow.weight)}
           reps={formatNumber(rpeRow.reps)}
           value={rpeRow.rpe}

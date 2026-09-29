@@ -28,6 +28,11 @@
   --recovery-yellow: #f7d54f;
   --recovery-green: #4ade80;
 
+  /* Set type colors */
+  --set-warmup: #d2a24c;
+  --set-drop: #7dc4e8;
+  --set-failure: #f87171;
+
   --button-bg: #8320fd;
   --button-bg-hover: color-mix(in oklch, var(--button-bg) 85%, white);
 

@@ -45,3 +45,10 @@ export const SET_TYPE_ABBR: Record<SetType, string> = {
   DROP_SET: "D",
   FAILURE: "F",
 };
+
+export const SET_TYPE_TEXT: Record<SetType, string> = {
+  WARM_UP: "text-(--set-warmup)",
+  NORMAL: "text-(--text)",
+  DROP_SET: "text-(--set-drop)",
+  FAILURE: "text-(--set-failure)",
+};
