@@ -79,6 +79,7 @@ export function ActiveWorkout({
                 key={workoutExercise.id}
                 exercise={exercise}
                 disabled={disabled}
+                variant="flat"
                 onRemove={() =>
                   run(() =>
                     removeWorkoutExercise(session.id, workoutExercise.id),
@@ -91,6 +92,7 @@ export function ActiveWorkout({
                   checkable
                   disabled={readOnly}
                   busy={isPending}
+                  variant="flat"
                   onUpdate={(setId, patch) =>
                     run(() => updateWorkoutSet(session.id, setId, patch))
                   }
@@ -115,7 +117,7 @@ export function ActiveWorkout({
                         ),
                       )
                     }
-                    className="flex h-8 items-center justify-center gap-1 rounded-md border border-(--bg-input) text-xs font-mono text-(--text-secondary) hover:bg-(--bg-input) disabled:opacity-60"
+                    className="flex h-8 w-full items-center justify-center gap-1 rounded-3xl bg-(--bg-input) text-xs font-mono text-(--text-secondary) transition-colors hover:bg-(--bg-input-hover) focus-visible:text-(--text) disabled:opacity-60"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     Add set
@@ -133,7 +135,7 @@ export function ActiveWorkout({
             type="button"
             onClick={() => setSheetOpen(true)}
             disabled={isPending}
-            className="h-10 w-full rounded-md border border-(--bg-surface) bg-(--bg-surface) font-bold transition-colors hover:bg-(--bg-surface-hover) disabled:opacity-60"
+            className="h-10 w-full rounded-3xl bg-(--bg-surface) font-bold transition-colors hover:bg-(--bg-surface-hover) disabled:opacity-60"
           >
             Add exercise
           </button>

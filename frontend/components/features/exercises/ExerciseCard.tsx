@@ -3,21 +3,33 @@ import { Trash2 } from "lucide-react";
 
 import { MUSCLE_GROUP_LABELS } from "@/data/exercises";
 import { getExerciseImageUrl } from "@/lib/exercises";
+import { cn } from "@/lib/utils";
 import type { Exercise } from "@/types";
 
 export function ExerciseCard({
   exercise,
   onRemove,
   disabled = false,
+  variant = "default",
   children,
 }: {
   exercise: Exercise | undefined;
   onRemove: () => void;
   disabled?: boolean;
+  variant?: "default" | "flat";
   children: ReactNode;
 }) {
+  const flat = variant === "flat";
+
   return (
-    <li className="rounded-lg border-2 border-(--bg-input) px-4 py-3">
+    <li
+      className={cn(
+        "py-3",
+        flat
+          ? "not-last:border-b not-last:border-(--bg-input)"
+          : "rounded-lg border-2 border-(--bg-input)",
+      )}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -27,7 +39,10 @@ export function ExerciseCard({
             width={40}
             height={40}
             loading="lazy"
-            className="h-10 w-10 shrink-0 rounded-md border border-(--bg-input) bg-(--bg-input) object-contain p-1"
+            className={cn(
+              "h-10 w-10 shrink-0 rounded-md bg-(--bg-input) object-contain p-1",
+              flat ? undefined : "border border-(--bg-input)",
+            )}
           />
           <div className="flex flex-col">
             <span className="font-pixel text-sm font-bold text-(--text-accent)">

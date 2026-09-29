@@ -37,6 +37,7 @@ function NumberInput({
   initial,
   inputMode,
   disabled,
+  flat,
   onCommit,
 }: {
   label: string;
@@ -44,6 +45,7 @@ function NumberInput({
   initial: string;
   inputMode: "decimal" | "numeric";
   disabled: boolean;
+  flat: boolean;
   onCommit: (value: string) => void;
 }) {
   const [value, setValue] = useState(initial);
@@ -63,7 +65,12 @@ function NumberInput({
       onKeyDown={(event) => {
         if (event.key === "Enter") event.currentTarget.blur();
       }}
-      className="h-9 w-full min-w-0 rounded-md border border-(--bg-input) bg-(--bg-input) px-1 text-center font-mono text-sm text-(--text) placeholder:text-(--text-muted) disabled:opacity-40 sm:text-xs"
+      className={cn(
+        "h-9 w-full min-w-0 rounded-md px-1 text-center font-mono text-sm text-(--text) placeholder:text-(--text-muted) disabled:opacity-40 sm:text-xs",
+        flat
+          ? "focus-visible:bg-(--bg-input-hover)"
+          : "border border-(--bg-input) bg-(--bg-input)",
+      )}
     />
   );
 }
@@ -74,6 +81,7 @@ function SetRow({
   checkable,
   disabled,
   busy,
+  flat,
   gridStyle,
   open,
   onOpenChange,
@@ -86,6 +94,7 @@ function SetRow({
   checkable: boolean;
   disabled: boolean;
   busy: boolean;
+  flat: boolean;
   gridStyle: CSSProperties;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -175,7 +184,12 @@ function SetRow({
           onChange={(event) =>
             onUpdate(row.id, { set_type: event.target.value as SetType })
           }
-          className="h-9 w-9 appearance-none rounded-md border border-(--bg-input) bg-(--bg-input) text-center font-mono text-xs text-(--text) disabled:opacity-40"
+          className={cn(
+            "h-9 w-9 appearance-none rounded-md text-center font-mono text-xs text-(--text) disabled:opacity-40",
+            flat
+              ? "focus-visible:bg-(--bg-input-hover)"
+              : "border border-(--bg-input) bg-(--bg-input)",
+          )}
         >
           {Object.entries(SET_TYPE_ABBR).map(([value, abbr]) => (
             <option key={value} value={value}>
@@ -190,6 +204,7 @@ function SetRow({
           initial={formatNumber(row.weight)}
           inputMode="decimal"
           disabled={disabled}
+          flat={flat}
           onCommit={(text) => commitNumber("weight", text)}
         />
 
@@ -199,6 +214,7 @@ function SetRow({
           initial={formatNumber(row.reps)}
           inputMode="numeric"
           disabled={disabled}
+          flat={flat}
           onCommit={(text) => commitNumber("reps", text)}
         />
 
@@ -209,7 +225,12 @@ function SetRow({
             aria-label={`RPE: ${formatNumber(row.rpe) || "empty"}`}
             aria-haspopup="dialog"
             onClick={() => onOpenRpe(row.id)}
-            className="flex h-9 w-full min-w-0 items-center justify-center gap-1 rounded-md border border-(--bg-input) bg-(--bg-input) font-mono text-sm text-(--text) transition-colors hover:border-(--text-secondary) disabled:opacity-40"
+            className={cn(
+              "flex h-9 w-full min-w-0 items-center justify-center gap-1 rounded-md font-mono text-sm text-(--text) transition-colors disabled:opacity-40",
+              flat
+                ? "hover:bg-(--bg-input-hover) focus-visible:bg-(--bg-input-hover)"
+                : "border border-(--bg-input) bg-(--bg-input) hover:border-(--text-secondary)",
+            )}
           >
             {formatNumber(row.rpe) ? (
               formatNumber(row.rpe)
@@ -234,10 +255,14 @@ function SetRow({
             disabled={disabled || busy}
             onClick={() => onUpdate(row.id, { completed: !row.completed })}
             className={cn(
-              "flex h-9 w-9 items-center justify-center justify-self-center rounded-md border transition-colors disabled:opacity-40",
-              row.completed
-                ? "border-transparent bg-(--button-bg) text-white"
-                : "border-(--bg-input) text-(--text-muted) hover:text-(--text)",
+              "flex h-9 w-9 items-center justify-center justify-self-center rounded-md transition-colors disabled:opacity-40",
+              flat
+                ? row.completed
+                  ? "bg-(--button-bg) text-white"
+                  : "text-(--text-muted) hover:text-(--text) focus-visible:bg-(--bg-input-hover)"
+                : row.completed
+                  ? "border border-transparent bg-(--button-bg) text-white"
+                  : "border border-(--bg-input) text-(--text-muted) hover:text-(--text)",
             )}
           >
             <Check className="h-4 w-4" />
@@ -267,6 +292,7 @@ export function SetTable({
   checkable = false,
   disabled = false,
   busy = false,
+  variant = "default",
   onUpdate,
   onRemove,
 }: {
@@ -275,11 +301,13 @@ export function SetTable({
   checkable?: boolean;
   disabled?: boolean;
   busy?: boolean;
+  variant?: "default" | "flat";
   onUpdate: (id: string, patch: SetTablePatch) => void;
   onRemove: (id: string) => void;
 }) {
   const [openRowId, setOpenRowId] = useState<string | null>(null);
   const [rpeRowId, setRpeRowId] = useState<string | null>(null);
+  const flat = variant === "flat";
 
   const sortedSets = useMemo(
     () => sets.slice().sort((a, b) => a.order - b.order),
@@ -322,6 +350,7 @@ export function SetTable({
             checkable={checkable}
             disabled={disabled}
             busy={busy}
+            flat={flat}
             gridStyle={gridStyle}
             open={openRowId === row.id}
             onOpenChange={(open) => setOpenRowId(open ? row.id : null)}
