@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import exists, or_, select
 from sqlalchemy.orm import Session
 
-from app.core.dependencies import get_current_user
+from app.core.dependencies import get_current_admin, get_current_user
 from app.database import get_db
 from app.models.exercise import Exercise
 from app.models.routine_exercise import RoutineExercise
@@ -22,7 +22,7 @@ router = APIRouter(prefix="/exercises", tags=["Exercises"])
 )
 def create_exercise(
     exercise: ExerciseCreate,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
     db_exercise = Exercise(
@@ -80,7 +80,7 @@ def get_all_exercises(
 def update_exercise(
     exercise_id: UUID,
     exercise_update: ExerciseUpdate,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
     db_exercise = db.get(Exercise, exercise_id)
@@ -110,7 +110,7 @@ def update_exercise(
 )
 def remove_exercise(
     exercise_id: UUID,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
     db_exercise = db.get(Exercise, exercise_id)
