@@ -1,6 +1,6 @@
 from uuid import UUID as PyUUID, uuid4
 
-from sqlalchemy import UUID as SqlUUID, ForeignKey
+from sqlalchemy import UUID as SqlUUID, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -15,6 +15,13 @@ if TYPE_CHECKING:
 
 class WorkoutExercise(Base):
     __tablename__ = "workout_exercises"
+    __table_args__ = (
+        UniqueConstraint(
+            "workout_session_id",
+            "order",
+            name="uq_workout_exercises_session_order",
+        ),
+    )
 
     id: Mapped[PyUUID] = mapped_column(
         SqlUUID(as_uuid=True), primary_key=True, default=uuid4
@@ -32,5 +39,7 @@ class WorkoutExercise(Base):
     )
     exercise: Mapped["Exercise"] = relationship(back_populates="workout_exercises")
     sets: Mapped[list["Set"]] = relationship(
-        back_populates="workout_exercise", cascade="all, delete-orphan"
+        back_populates="workout_exercise",
+        cascade="all, delete-orphan",
+        order_by="Set.order",
     )

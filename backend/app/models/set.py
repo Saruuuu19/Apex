@@ -2,7 +2,7 @@ from decimal import Decimal
 from uuid import UUID as PyUUID
 from uuid import uuid4
 
-from sqlalchemy import Numeric, ForeignKey
+from sqlalchemy import ForeignKey, Numeric, UniqueConstraint
 from sqlalchemy import UUID as SqlUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -17,6 +17,13 @@ if TYPE_CHECKING:
 
 class Set(Base):
     __tablename__ = "sets"
+    __table_args__ = (
+        UniqueConstraint(
+            "workout_exercise_id",
+            "order",
+            name="uq_sets_workout_exercise_order",
+        ),
+    )
 
     id: Mapped[PyUUID] = mapped_column(
         SqlUUID(as_uuid=True), primary_key=True, default=uuid4

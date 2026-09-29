@@ -38,6 +38,8 @@ class WorkoutSession(Base):
     routine: Mapped["Routine | None"] = relationship(back_populates="workout_sessions")
     user: Mapped["User"] = relationship(back_populates="workout_sessions")
     workout_exercises: Mapped[list["WorkoutExercise"]] = relationship(
-        back_populates="workout_session", cascade="all, delete-orphan"
+        back_populates="workout_session",
+        cascade="all, delete-orphan",
+        order_by="WorkoutExercise.order",
     )
     workout_posts: Mapped[list["WorkoutPost"]] = relationship(back_populates="workout_session")
